@@ -11,10 +11,14 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = PIC
 TEMPLATE = app
 
+include(Local.pri)
 
 SOURCES += main.cpp\
         picmainwindow.cpp
 
-HEADERS  += picmainwindow.h
+HEADERS  += picmainwindow.h \
+    picsym/picsym.h \
+    picsym/cell.h \
+    picsym/mesh2d.h
 
 FORMS    += picmainwindow.ui
