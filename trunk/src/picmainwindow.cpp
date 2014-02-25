@@ -1,6 +1,7 @@
 #include "picmainwindow.h"
 #include "ui_picmainwindow.h"
 #include "picsym/hilbert.h"
+#include "picsym/slicer.h"
 
 PICMainWindow::PICMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -21,10 +22,15 @@ PICMainWindow::~PICMainWindow()
 
 void PICMainWindow::on_startButton_clicked()
 {    
-    const size_t mesh_size = 32;
-    const size_t scale = 10;    
+    const size_t mesh_size = ui->sizeBox->value();
+    const size_t num_of_nodes = ui->nodesBox->value();
 
-    size_t prev_x = 0, prev_y = 0;
+    mesh.setDimensions(mesh_size, mesh_size);
+
+    std::vector<size_t> sizes;
+    picsym::Slicer::slice(mesh.getNumOfCells(), num_of_nodes, sizes); // distr cells equally by nodes
+
+    /*size_t prev_x = 0, prev_y = 0;
 
     QPainterPath path;
     path.moveTo(prev_x*scale, prev_y*scale);
@@ -37,18 +43,15 @@ void PICMainWindow::on_startButton_clicked()
         prev_y = y;
     }
 
-    scene.addPath(path);
-
-    //scene.addRect(0, 0, ui->graphicsView->geometry().width() - 10, ui->graphicsView->geometry().height() - 10);
-    //visualizer.draw();
+    scene.clear();
+    scene.addPath(path);*/
 }
 
-void PICMainWindow::on_widthBox_valueChanged(int arg1)
+void PICMainWindow::on_sizeBox_valueChanged(int arg1)
 {
-  //  width = arg1;
 }
 
-void PICMainWindow::on_heightBox_valueChanged(int arg1)
+void PICMainWindow::on_nodesBox_valueChanged(int arg1)
 {
 
 }
