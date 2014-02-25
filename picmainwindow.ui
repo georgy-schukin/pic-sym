@@ -33,7 +33,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QLabel" name="widthLabel">
+       <widget class="QLabel" name="sizeLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -41,12 +41,12 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Width:</string>
+         <string>Mesh size:</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="widthBox">
+       <widget class="QSpinBox" name="sizeBox">
         <property name="minimum">
          <number>1</number>
         </property>
@@ -54,12 +54,12 @@
          <number>10000</number>
         </property>
         <property name="value">
-         <number>100</number>
+         <number>32</number>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="heightLabel">
+       <widget class="QLabel" name="nodesLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -67,12 +67,12 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Height:</string>
+         <string>Num of nodes:</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="heightBox">
+       <widget class="QSpinBox" name="nodesBox">
         <property name="minimum">
          <number>1</number>
         </property>
@@ -80,7 +80,7 @@
          <number>10000</number>
         </property>
         <property name="value">
-         <number>100</number>
+         <number>8</number>
         </property>
        </widget>
       </item>
@@ -101,7 +101,7 @@
      <x>0</x>
      <y>0</y>
      <width>600</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

@@ -18,13 +18,17 @@ INCLUDEPATH += $$PWD/include
 SOURCES += src/main.cpp\
         src/picmainwindow.cpp \
     src/picsym/hilbert.cpp \
-    src/picviz.cpp
+    src/picviz.cpp \
+    src/picsym/slicer.cpp \
+    src/picsym/machine.cpp
 
 HEADERS  += include/picmainwindow.h \
     include/picsym/cell.h \
     include/picsym/mesh2d.h \
     include/picsym/node.h \
     include/picviz.h \
-    include/picsym/hilbert.h
+    include/picsym/hilbert.h \
+    include/picsym/slicer.h \
+    include/picsym/machine.h
 
 FORMS    += picmainwindow.ui

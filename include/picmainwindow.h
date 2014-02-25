@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include "picsym/mesh2d.h"
 #include "picviz.h"
+#include <vector>
 
 namespace Ui {
 class PICMainWindow;
@@ -19,18 +20,15 @@ public:
     ~PICMainWindow();
     
 private slots:
-    void on_startButton_clicked();
-
-    void on_widthBox_valueChanged(int arg1);
-
-    void on_heightBox_valueChanged(int arg1);
+    void on_startButton_clicked();    
+    void on_sizeBox_valueChanged(int arg1);
+    void on_nodesBox_valueChanged(int arg1);
 
 private:
-    Ui::PICMainWindow *ui;
+    Ui::PICMainWindow *ui;    
     QGraphicsScene scene;
-    picsym::Mesh2D mesh;
-    PICVisualizer visualizer;
-    size_t width;
+    picsym::Mesh2D mesh;  
+    //PICVisualizer visualizer;
 };
 
 #endif // PICMAINWINDOW_H
