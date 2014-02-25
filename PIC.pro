@@ -17,8 +17,9 @@ SOURCES += main.cpp\
         picmainwindow.cpp
 
 HEADERS  += picmainwindow.h \
-    picsym/picsym.h \
     picsym/cell.h \
-    picsym/mesh2d.h
+    picsym/mesh2d.h \
+    picsym/node.h \
+    picviz.h
 
 FORMS    += picmainwindow.ui

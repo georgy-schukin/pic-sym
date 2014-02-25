@@ -1,5 +1,4 @@
-#ifndef CELL_H
-#define CELL_H
+#pragma once
 
 namespace picsym {
 
@@ -23,4 +22,3 @@ public:
 
 }
 
-#endif // CELL_H

@@ -1,5 +1,4 @@
-#ifndef MESH2D_H
-#define MESH2D_H
+#pragma once
 
 #include "picsym/cell.h"
 #include <vector>
@@ -38,4 +37,5 @@ public:
     }
 };
 
-#endif // MESH2D_H
+}
+
