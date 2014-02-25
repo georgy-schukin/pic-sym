@@ -13,13 +13,18 @@ TEMPLATE = app
 
 include(Local.pri)
 
-SOURCES += main.cpp\
-        picmainwindow.cpp
+INCLUDEPATH += $$PWD/include
 
-HEADERS  += picmainwindow.h \
-    picsym/cell.h \
-    picsym/mesh2d.h \
-    picsym/node.h \
-    picviz.h
+SOURCES += src/main.cpp\
+        src/picmainwindow.cpp \
+    src/picsym/hilbert.cpp \
+    src/picviz.cpp
+
+HEADERS  += include/picmainwindow.h \
+    include/picsym/cell.h \
+    include/picsym/mesh2d.h \
+    include/picsym/node.h \
+    include/picviz.h \
+    include/picsym/hilbert.h
 
 FORMS    += picmainwindow.ui
