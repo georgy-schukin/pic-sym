@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include "picsym/mesh2d.h"
+#include "picviz.h"
 
 namespace Ui {
 class PICMainWindow;
@@ -28,6 +29,8 @@ private:
     Ui::PICMainWindow *ui;
     QGraphicsScene scene;
     picsym::Mesh2D mesh;
+    PICVisualizer visualizer;
+    size_t width;
 };
 
 #endif // PICMAINWINDOW_H
