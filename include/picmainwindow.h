@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include "picsym/mesh2d.h"
+#include "picsym/machine.h"
 #include "picviz.h"
 #include <vector>
 
@@ -28,6 +29,7 @@ private:
     Ui::PICMainWindow *ui;    
     QGraphicsScene scene;
     picsym::Mesh2D mesh;  
+    picsym::Machine machine;
     //PICVisualizer visualizer;
 };
 

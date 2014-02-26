@@ -4,6 +4,9 @@
 
 namespace picsym {
 
+/**
+ * @brief Transform from 2D integer coordinates to Hilbert curve integer distance and back
+ */
 class Hilbert
 {
 private:

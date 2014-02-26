@@ -1,32 +1,31 @@
 #pragma once
 
-#include "picsym/cell.h"
+#include "picsym/cellarray.h"
 #include <vector>
+#include <QGraphicsScene>
 
 namespace picsym {
 
-class Mesh2D {
-private:
-    std::vector<Cell> cells;
+/**
+ * @brief 2D mesh of cells
+ */
+class Mesh2D : protected CellArray {
+private:    
     size_t width;
     size_t height;
 
 public:
-    typedef std::vector<Cell>::iterator iterator;
-    typedef std::vector<Cell>::const_iterator const_iterator;
-
-public:
     Mesh2D() : width(0), height(0) {}
     Mesh2D(const size_t& w, const size_t& h) : width(w), height(h) {
-        cells.resize(width*height, Cell());
+        resize(width*height);
     }
     ~Mesh2D() {}
 
     void setDimensions(const size_t& w, const size_t& h) {
         width = w;
         height = h;
-        cells.resize(width*height, Cell());
-    }
+        resize(width*height);
+    }      
 
     const size_t& getWidth() const {
         return width;
@@ -34,15 +33,23 @@ public:
 
     const size_t& getHeight() const {
         return height;
+    }    
+
+    const Cell& operator()(const size_t& row, const size_t& col) const {
+        return cells[row*width + col];
     }
 
-    const std::vector<Cell>& getCells() const {
-        return cells;
+    Cell& operator()(const size_t& row, const size_t& col) {
+        return cells[row*width + col];
     }
 
     size_t getNumOfCells() const {
         return width*height;
     }
+
+    void initExplosion(const size_t& max_value);
+
+    void draw(QGraphicsScene& scene);
 };
 
 }
