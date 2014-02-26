@@ -1,35 +1,27 @@
 #pragma once
 
 #include <cstddef>
+#include "picsym/meshpart.h"
 
 namespace picsym {
 
+/**
+ * @brief Node that contains part of a distributed mesh
+ */
 class Node {
 private:
-    size_t start;
-    size_t end;
+    size_t id;
+    MeshPart mesh_part;
 
 public:
-    Node() : start(0), end(0) {}
+    Node() : id(0) {}
+    Node(const size_t& i) : id(i) {}
+    Node(const size_t& i, const Mesh2D& mesh, const size_t& start, const size_t& end) : id(i), mesh_part(mesh, start, end) {}
     ~Node() {}
 
-    void setIndexStart(const size_t& s) {
-        start = s;
+    const MeshPart& getMesh() const {
+        return mesh_part;
     }
-
-    void setIndexEnd(const size_t& e) {
-        end = e;
-    }
-
-    const size_t& getIndexStart() const {
-        return start;
-    }
-
-    const size_t& getIndexEnd() const {
-        return end;
-    }
-
 };
 
 }
-

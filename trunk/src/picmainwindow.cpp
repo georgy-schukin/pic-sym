@@ -25,10 +25,13 @@ void PICMainWindow::on_startButton_clicked()
     const size_t mesh_size = ui->sizeBox->value();
     const size_t num_of_nodes = ui->nodesBox->value();
 
-    mesh.setDimensions(mesh_size, mesh_size);
+    scene.clear();
 
-    std::vector<size_t> sizes;
-    picsym::Slicer::slice(mesh.getNumOfCells(), num_of_nodes, sizes); // distr cells equally by nodes
+    mesh.setDimensions(mesh_size, mesh_size);
+    mesh.initExplosion(100);
+    mesh.draw(scene);
+
+    machine.init(num_of_nodes, mesh);
 
     /*size_t prev_x = 0, prev_y = 0;
 
