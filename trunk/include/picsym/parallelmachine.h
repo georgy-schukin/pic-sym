@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <vector>
 #include "nodethread.h"
+#include "cellmesh2d.h"
 
 namespace picsym {
 
@@ -13,13 +14,13 @@ private:
 
 public:
     ParallelMachine() {}
-    ParallelMachine(const size_t& num_of_nodes, const Mesh2D& mesh) {
-        //init(num_of_nodes, mesh);
+    ParallelMachine(const size_t& num_of_nodes, const CellMesh2D& mesh) {
+        init(num_of_nodes, mesh);
     }
 
     ~ParallelMachine() {}
 
-    //void init(const size_t& num_of_nodes, const Mesh2D& mesh);
+    void init(const size_t& num_of_nodes, const CellMesh2D& mesh);
     void start();
     void stop();
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "array.h"
+#include "cell.h"
 
 namespace picsym {
 
