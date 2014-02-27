@@ -1,6 +1,7 @@
 #pragma once
 
-#include "picsym/cellarray.h"
+#include "array.h"
+#include "cell.h"
 #include <vector>
 #include <QGraphicsScene>
 
@@ -9,7 +10,7 @@ namespace picsym {
 /**
  * @brief 2D mesh of cells
  */
-class Mesh2D : protected CellArray {
+class Mesh2D : public Array<Cell> {
 private:    
     size_t width;
     size_t height;
@@ -36,11 +37,11 @@ public:
     }    
 
     const Cell& operator()(const size_t& row, const size_t& col) const {
-        return cells[row*width + col];
+        return at(row*width + col);
     }
 
     Cell& operator()(const size_t& row, const size_t& col) {
-        return cells[row*width + col];
+        return at(row*width + col);
     }
 
     size_t getNumOfCells() const {

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "picsym/cellarray.h"
-#include "picsym/mesh2d.h"
+#include "array.h"
+#include "mesh2d.h"
+#include "cell.h"
 #include <vector>
 #include <cstddef>
 
@@ -10,7 +11,7 @@ namespace picsym {
 /**
  * @brief Part of a cell mesh on a node
  */
-class MeshPart : protected CellArray
+class MeshPart : public Array<Cell>
 {
 private:    
     size_t index_start; // start index for the cell array (by Hilbert distance, for example)

@@ -1,9 +1,9 @@
-#include "picsym/machine.h"
+#include "picsym/parallelmachine.h"
 #include "picsym/slicer.h"
 
 namespace picsym {
 
-void Machine::init(const size_t& num_of_nodes, const Mesh2D& mesh) {
+void ParallelMachine::init(const size_t& num_of_nodes, const Mesh2D& mesh) {
     std::vector<size_t> part_sizes;
 
     Slicer::slice(mesh.getNumOfCells(), num_of_nodes, part_sizes);
@@ -16,7 +16,7 @@ void Machine::init(const size_t& num_of_nodes, const Mesh2D& mesh) {
     }
 }
 
-void Machine::draw(QGraphicsScene &scene) {
+void ParallelMachine::draw(QGraphicsScene &scene) {
 
 }
 

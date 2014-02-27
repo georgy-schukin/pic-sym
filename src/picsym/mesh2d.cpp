@@ -19,20 +19,20 @@ void Mesh2D::initExplosion(const size_t& max_value) {
             const double rx = min_x + x*step_x;
             const double ry = min_y + y*step_y;
             const double val = 1.0 - (rx*rx + ry*ry);
-            cells[y*width + x].setNumOfParticles(val > 0 ? val*max_value : 0);
+            at(y*width + x).setNumOfParticles(val > 0 ? val*max_value : 0);
         }
     }
 }
 
 void Mesh2D::draw(QGraphicsScene &scene) {
     size_t max_val = 0;
-    for (std::vector<Cell>::iterator it = cells.begin(); it != cells.end(); it++)
+    for (Array<Cell>::const_iterator it = begin(); it != end(); it++)
         if (max_val < it->getNumOfParticles())
             max_val = it->getNumOfParticles();
 
     for (size_t y = 0; y < height; y++) {
         for (size_t x = 0; x < width; x++) {
-            const size_t val = cells[y*width + x].getNumOfParticles();
+            const size_t val = at(y*width + x).getNumOfParticles();
             const int color = int((float(val)/float(max_val + 1))*255.0);
             scene.addRect(QRectF(x*10, y*10, 8, 8), QPen(), QBrush(QColor(color, 0, 0)));
         }
