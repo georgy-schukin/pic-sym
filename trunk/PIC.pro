@@ -20,20 +20,22 @@ SOURCES += src/main.cpp\
     src/picsym/hilbert.cpp \
     src/picviz.cpp \
     src/picsym/slicer.cpp \
-    src/picsym/machine.cpp \
     src/picsym/meshpart.cpp \
     src/picsym/mesh2d.cpp \
-    src/picsym/cellarray.cpp
+    src/picsym/parallelmachine.cpp
 
-HEADERS  += include/picmainwindow.h \
-    include/picsym/cell.h \
+HEADERS  += include/picmainwindow.h \    
     include/picsym/mesh2d.h \
     include/picsym/node.h \
     include/picviz.h \
     include/picsym/hilbert.h \
     include/picsym/slicer.h \
-    include/picsym/machine.h \
     include/picsym/meshpart.h \
-    include/picsym/cellarray.h
+    include/picsym/base/cell.h \
+    include/picsym/base/array.h \
+    include/picsym/base/inode.h \
+    include/picsym/base/list.h \
+    include/picsym/parallelmachine.h \
+    include/picsym/nodethread.h
 
 FORMS    += picmainwindow.ui

@@ -9,12 +9,13 @@ namespace picsym {
  */
 class Cell {
 private:
-    size_t num_of_particles;
     size_t id;
-    
+    size_t num_of_particles;
+
 public:
-    Cell(): num_of_particles(0), id(0) {}
+    Cell(): id(0), num_of_particles(0) {}
     Cell(const size_t& i, const size_t& num) : id(i), num_of_particles(num) {}
+    Cell(const Cell& c) : id(c.id), num_of_particles(c.num_of_particles) {}
     ~Cell() {}
     
     void setNumOfParticles(const size_t& num) {

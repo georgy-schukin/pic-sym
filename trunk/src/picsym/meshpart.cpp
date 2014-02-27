@@ -14,7 +14,7 @@ void MeshPart::initByHilbert(const Mesh2D& mesh, const size_t& start, const size
     for (size_t dist = index_start; dist < index_end; dist++) {
         size_t x = 0, y = 0;
         Hilbert::distanceToCoord(dist, mesh_size, x, y);
-        cells[dist - index_start] = mesh(y, x);
+        at(dist - index_start) = mesh(y, x);
     }
 }
 

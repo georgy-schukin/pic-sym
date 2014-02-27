@@ -4,8 +4,7 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include "picsym/mesh2d.h"
-#include "picsym/machine.h"
-#include "picviz.h"
+#include "picsym/parallelmachine.h"
 #include <vector>
 
 namespace Ui {
@@ -28,9 +27,9 @@ private slots:
 private:
     Ui::PICMainWindow *ui;    
     QGraphicsScene scene;
+
     picsym::Mesh2D mesh;  
-    picsym::Machine machine;
-    //PICVisualizer visualizer;
+    picsym::ParallelMachine machine;
 };
 
 #endif // PICMAINWINDOW_H
