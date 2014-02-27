@@ -1,7 +1,7 @@
 #pragma once
 
-#include "array.h"
-#include "cell.h"
+#include "base/array.h"
+#include "base/cell.h"
 #include <vector>
 #include <QGraphicsScene>
 
