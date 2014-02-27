@@ -1,7 +1,7 @@
 #include "picmainwindow.h"
 #include "ui_picmainwindow.h"
-#include "picsym/hilbert.h"
-#include "picsym/slicer.h"
+//#include "picsym/base/hilbert.h"
+//#include "picsym/slicer.h"
 
 PICMainWindow::PICMainWindow(QWidget *parent) :
     QMainWindow(parent),

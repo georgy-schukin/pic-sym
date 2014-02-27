@@ -17,25 +17,27 @@ INCLUDEPATH += $$PWD/include
 
 SOURCES += src/main.cpp\
         src/picmainwindow.cpp \
-    src/picsym/hilbert.cpp \
+    src/picsym/base/hilbert.cpp \
     src/picviz.cpp \
-    src/picsym/slicer.cpp \
-    src/picsym/meshpart.cpp \
-    src/picsym/mesh2d.cpp \
-    src/picsym/parallelmachine.cpp
+    src/picsym/base/slicer.cpp \
+    src/picsym/parallelmachine.cpp \
+    src/picsym/cellmesh2d.cpp \
+    src/picsym/nodethread.cpp \
+    src/picsym/cellrange.cpp
 
 HEADERS  += include/picmainwindow.h \    
-    include/picsym/mesh2d.h \
+    include/picsym/base/mesh2d.h \
     include/picsym/node.h \
     include/picviz.h \
-    include/picsym/hilbert.h \
-    include/picsym/slicer.h \
-    include/picsym/meshpart.h \
+    include/picsym/base/hilbert.h \
+    include/picsym/base/slicer.h \
     include/picsym/base/cell.h \
     include/picsym/base/array.h \
     include/picsym/base/inode.h \
     include/picsym/base/list.h \
     include/picsym/parallelmachine.h \
-    include/picsym/nodethread.h
+    include/picsym/nodethread.h \
+    include/picsym/cellmesh2d.h \
+    include/picsym/cellrange.h
 
 FORMS    += picmainwindow.ui

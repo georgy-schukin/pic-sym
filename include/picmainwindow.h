@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
-#include "picsym/mesh2d.h"
+#include "picsym/cellmesh2d.h"
 #include "picsym/parallelmachine.h"
 #include <vector>
 
@@ -28,7 +28,7 @@ private:
     Ui::PICMainWindow *ui;    
     QGraphicsScene scene;
 
-    picsym::Mesh2D mesh;  
+    picsym::CellMesh2D mesh;
     picsym::ParallelMachine machine;
 };
 
