@@ -4,9 +4,6 @@
 namespace picsym {
 
 void CellMesh2D::initExplosion(const size_t& max_value) {
-    //const size_t diameter = width < height ? width : height;
-    //const size_t radius = diameter / 2;
-
     const double max_x = 1.0; // scale mesh to -1:1 square
     const double min_x = -1.0;
     const double max_y = 1.0;
