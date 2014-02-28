@@ -7,7 +7,7 @@
 namespace picsym {
 
 class CellMesh2D : public Mesh2D<Cell>
-{
+{   
 public:
     CellMesh2D() {}
     CellMesh2D(const size_t& w, const size_t& h) : Mesh2D(w, h) {}
@@ -16,6 +16,8 @@ public:
     size_t getNumOfCells() const {
         return data().getSize();
     }
+
+    void initIds();
 
     void initExplosion(const size_t& max_value);
 

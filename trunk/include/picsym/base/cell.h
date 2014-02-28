@@ -21,6 +21,14 @@ public:
     void setNumOfParticles(const size_t& num) {
         num_of_particles = num;
     }
+
+    void addParticles(const size_t& add_num) {
+        num_of_particles += add_num;
+    }
+
+    void removeParticles(const size_t& rem_num) {
+        num_of_particles -= rem_num;
+    }
     
     const size_t& getNumOfParticles() const {
         return num_of_particles;

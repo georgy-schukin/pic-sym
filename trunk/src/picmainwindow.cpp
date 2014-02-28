@@ -28,6 +28,7 @@ void PICMainWindow::on_startButton_clicked()
     scene.clear();
 
     mesh.setDimensions(mesh_size, mesh_size);
+    mesh.initIds();
     mesh.initExplosion(100);
     mesh.draw(scene);
 

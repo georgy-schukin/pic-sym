@@ -16,6 +16,7 @@ private:
 
 public:
     typedef typename std::list<T>::iterator iterator;
+    typedef typename std::list<T>::reverse_iterator reverse_iterator;
     typedef typename std::list<T>::const_iterator const_iterator;
 
 public:
@@ -45,8 +46,52 @@ public:
         return data.end();
     }
 
-    void resize(const size_t& size) {
-        data.resize(size);
+    reverse_iterator rbegin() const {
+        return data.rbegin();
+    }
+
+    reverse_iterator rend() const {
+        return data.rend();
+    }
+
+    void pushToBack(const T& elem) {
+        data.push_back(elem);
+    }
+
+    void pushToFront(const T& elem) {
+        data.push_front(elem);
+    }
+
+    void pushToBack(iterator start, iterator end) {
+        data.insert(data.end(), start, end);
+    }
+
+    void pushToFront(iterator start, iterator end) {
+        data.insert(data.begin(), start, end);
+    }
+
+    T popFromBack() {
+        T elem = data.back();
+        data.pop_back();
+        return elem;
+    }
+
+    T popFromFront() {
+        T elem = data.front();
+        data.pop_front();
+        return elem;
+    }
+
+    const T& back() const {
+        return data.back();
+    }
+
+    const T& front() const {
+        return data.front();
+    }
+
+    bool isEmpty() const {
+        return data.empty();
     }
 };
 
