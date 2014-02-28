@@ -1,7 +1,14 @@
 #include "picsym/cellmesh2d.h"
+#include "picsym/base/hilbert.h"
 #include <QGraphicsTextItem>
 
 namespace picsym {
+
+void CellMesh2D::initIds() {
+    for (size_t y = 0; y < getHeight(); y++)
+        for (size_t x = 0; x < getWidth(); x++)
+            operator ()(y, x).setId(Hilbert::coordToDistance(x, y, getWidth()));
+}
 
 void CellMesh2D::initExplosion(const size_t& max_value) {
     const double max_x = 1.0; // scale mesh to -1:1 square
@@ -16,7 +23,7 @@ void CellMesh2D::initExplosion(const size_t& max_value) {
             const double rx = min_x + x*step_x;
             const double ry = min_y + y*step_y;
             const double val = 1.0 - (rx*rx + ry*ry);
-            operator ()(x, y).setNumOfParticles(val > 0 ? val*max_value : 0);
+            operator ()(y, x).setNumOfParticles(val > 0 ? val*max_value : 0);
         }
     }
 }
