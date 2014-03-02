@@ -1,7 +1,6 @@
 #pragma once
 
 #include "cell.h"
-//#include "cellmesh2d.h"
 #include <list>
 #include <cstddef>
 
@@ -20,14 +19,8 @@ private:
     std::list<Cell> cells;
 
 public:
-    CellRange() {}
-    /*CellRange(const CellMesh2D& mesh, const size_t& start, const size_t& end) {
-        initByHilbert(mesh, start, end);
-    }*/
-
-    ~CellRange() {}
-
-  //  void initByHilbert(const CellMesh2D& mesh, const size_t& start, const size_t& end);
+    CellRange() {}        
+    ~CellRange() {}  
 
     const std::list<Cell>& getCells() const {
         return cells;
@@ -61,20 +54,17 @@ public:
         return cells.front();
     }
 
-    size_t getStartId() const;
-    size_t getEndId() const;
+    size_t getFrontId() const;
+    size_t getBackId() const;
 
-    void addToStart(const Cell& cell);
-    void addToStart(const CellRange& cell_range);
+    void add(const Cell& cell);
+    void add(const CellRange& cell_range);
 
-    void addToEnd(const Cell& cell);
-    void addToEnd(const CellRange& cell_range);
+    Cell removeFromFront();
+    Cell removeFromBack();
 
-    Cell removeFromStart();
-    Cell removeFromEnd();
-
-    Cell separateStart(const size_t& particles_to_take);
-    Cell separateEnd(const size_t& particles_to_take);
+    Cell splitFront(const size_t& particles_to_take);
+    Cell splitBack(const size_t& particles_to_take);
 };
 
 }

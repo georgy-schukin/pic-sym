@@ -2,6 +2,7 @@
 
 #include "base/mesh2d.h"
 #include "base/cell.h"
+#include "base/cellrange.h"
 #include <QGraphicsScene>
 
 namespace picsym {
@@ -16,6 +17,8 @@ public:
     size_t getNumOfCells() const {
         return data().getSize();
     }
+
+    CellRange getRange(const size_t& start, const size_t& end) const;
 
     void initIds();
 

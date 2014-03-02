@@ -4,6 +4,14 @@
 
 namespace picsym {
 
+CellRange CellMesh2D::getRange(const size_t &start, const size_t &end) const {
+    CellRange range;
+    for (size_t dist = start; dist < end; dist++) {
+        range.add(this->operator ()(Hilbert::distanceToCoord(dist, getWidth())));
+    }
+    return range;
+}
+
 void CellMesh2D::initIds() {
     for (size_t y = 0; y < getHeight(); y++)
         for (size_t x = 0; x < getWidth(); x++)

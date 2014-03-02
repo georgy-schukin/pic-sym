@@ -2,16 +2,10 @@
 
 namespace picsym {
 
-void NodeThread::ThreadFunc() {
+void NodeThread::threadFunction() {
+    while (isWorking()) {
 
-}
-
-void NodeThread::start() {
-
-}
-
-void NodeThread::stop() {
-
+    }
 }
 
 void NodeThread::addNeighbour(const size_t& neigh_id, INode *neighbour) {
@@ -25,11 +19,16 @@ void NodeThread::sendLoadInfo(const size_t& src_id, const size_t& load) {
 }
 
 void NodeThread::sendCells(const size_t& src_id, const CellRange& cells) {
-    if (src_id >= id) { // get cells from right
-        my_cells.addToEnd(cells);
-    } else { // get cells from left
-        my_cells.addToStart(cells);
-    }
+    boost::unique_lock<boost::mutex> lock(mutex);
+    my_cells.add(cells);
+}
+
+size_t NodeThread::getCurrentLoad() const {
+    boost::unique_lock<boost::mutex> lock(mutex);
+    size_t load = 0;
+    for (CellRange::const_iterator it = my_cells.begin(); it != my_cells.end(); it++)
+        load += it->getNumOfParticles();
+    return load;
 }
 
 }

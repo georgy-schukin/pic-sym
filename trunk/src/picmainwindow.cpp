@@ -32,7 +32,7 @@ void PICMainWindow::on_startButton_clicked()
     mesh.initExplosion(100);
     mesh.draw(scene);
 
-    machine.init(num_of_nodes, mesh);
+    machine.start(num_of_nodes, mesh);
 
     /*size_t prev_x = 0, prev_y = 0;
 
@@ -58,4 +58,9 @@ void PICMainWindow::on_sizeBox_valueChanged(int arg1)
 void PICMainWindow::on_nodesBox_valueChanged(int arg1)
 {
 
+}
+
+void PICMainWindow::on_stopButton_clicked()
+{
+    machine.stop();
 }

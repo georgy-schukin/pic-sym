@@ -23,11 +23,12 @@ SOURCES += src/main.cpp\
     src/picsym/parallelmachine.cpp \
     src/picsym/cellmesh2d.cpp \
     src/picsym/nodethread.cpp \
-    src/picsym/base/cellrange.cpp
+    src/picsym/base/cellrange.cpp \
+    src/picsym/base/cell.cpp \
+    src/picsym/base/threadactivity.cpp
 
 HEADERS  += include/picmainwindow.h \    
     include/picsym/base/mesh2d.h \
-    include/picsym/node.h \
     include/picviz.h \
     include/picsym/base/hilbert.h \
     include/picsym/base/slicer.h \
@@ -38,6 +39,8 @@ HEADERS  += include/picmainwindow.h \
     include/picsym/parallelmachine.h \
     include/picsym/nodethread.h \
     include/picsym/cellmesh2d.h \
-    include/picsym/base/cellrange.h
+    include/picsym/base/cellrange.h \
+    include/picsym/base/coord2d.h \
+    include/picsym/base/threadactivity.h
 
 FORMS    += picmainwindow.ui
