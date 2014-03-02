@@ -1,6 +1,7 @@
 #pragma once
 
 #include "array.h"
+#include "coord2d.h"
 
 namespace picsym {
 
@@ -43,7 +44,15 @@ public:
 
     T& operator()(const size_t& row, const size_t& col) {
         return elems.at(row*width + col);
-    }  
+    }
+
+    const T& operator()(const Coord2D& c) const {
+        return elems.at(c.getY()*width + c.getX());
+    }
+
+    T& operator()(const Coord2D& c) {
+        return elems.at(c.getY()*width + c.getX());
+    }
 
     const typename Array<T>& data() const {
         return elems;

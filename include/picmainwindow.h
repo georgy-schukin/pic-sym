@@ -24,6 +24,8 @@ private slots:
     void on_sizeBox_valueChanged(int arg1);
     void on_nodesBox_valueChanged(int arg1);
 
+    void on_stopButton_clicked();
+
 private:
     Ui::PICMainWindow *ui;    
     QGraphicsScene scene;

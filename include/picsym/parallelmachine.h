@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef Q_MOC_RUN
+#include <boost/ptr_container/ptr_vector.hpp>
+#endif
+
 #include <QGraphicsScene>
 #include <cstddef>
 #include <vector>
@@ -9,19 +13,17 @@
 namespace picsym {
 
 class ParallelMachine {
+private:
+    typedef boost::ptr_vector<NodeThread> NodeThreadArray;
+
 private:    
-    std::vector<NodeThread> threads;
+    NodeThreadArray threads;
 
 public:
-    ParallelMachine() {}
-    ParallelMachine(const size_t& num_of_nodes, const CellMesh2D& mesh) {
-        init(num_of_nodes, mesh);
-    }
-
+    ParallelMachine() {}    
     ~ParallelMachine() {}
 
-    void init(const size_t& num_of_nodes, const CellMesh2D& mesh);
-    void start();
+    void start(const size_t& num_of_nodes, const CellMesh2D& mesh);
     void stop();
 
     void draw(QGraphicsScene& scene);

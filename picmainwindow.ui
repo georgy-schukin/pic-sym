@@ -80,7 +80,7 @@
          <number>10000</number>
         </property>
         <property name="value">
-         <number>8</number>
+         <number>4</number>
         </property>
        </widget>
       </item>
@@ -90,6 +90,13 @@
      <widget class="QPushButton" name="startButton">
       <property name="text">
        <string>Start</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="stopButton">
+      <property name="text">
+       <string>Stop</string>
       </property>
      </widget>
     </item>

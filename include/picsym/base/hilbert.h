@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include "coord2d.h"
 
 namespace picsym {
 
@@ -14,7 +15,10 @@ private:
 
 public:
     static size_t coordToDistance(const size_t& x, const size_t& y, const size_t& mesh_size);
+    static size_t coordToDistance(const Coord2D& coord, const size_t& mesh_size);
+
     static void distanceToCoord(const size_t& dist, const size_t& mesh_size, size_t& x, size_t& y);
+    static Coord2D distanceToCoord(const size_t& dist, const size_t& mesh_size);
 };
 
 }

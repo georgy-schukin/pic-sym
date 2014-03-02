@@ -28,7 +28,7 @@ public:
 
     void removeParticles(const size_t& rem_num) {
         num_of_particles -= rem_num;
-    }
+    }       
     
     const size_t& getNumOfParticles() const {
         return num_of_particles;
@@ -41,6 +41,9 @@ public:
     const size_t& getId() const {
         return id;
     }
+
+    Cell split(const size_t& particles_to_take);
+    const Cell& merge(const Cell& cell);
 };
 
 }
