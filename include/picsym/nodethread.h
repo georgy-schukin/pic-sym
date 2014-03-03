@@ -13,7 +13,7 @@ namespace picsym {
 class NodeThread : public INode, public ThreadActivity
 {
 private:
-    mutable boost::mutex mutex;
+    mutable boost::mutex mutex;    
 
 private:
     CellRange my_cells;

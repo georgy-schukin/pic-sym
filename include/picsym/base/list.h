@@ -20,10 +20,7 @@ public:
     typedef typename std::list<T>::const_iterator const_iterator;
 
 public:
-    List() {}
-    List(const size_t& size) {
-        resize(size);
-    }
+    List() {}    
     ~List() {}
 
     size_t getSize() const {

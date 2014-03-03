@@ -4,15 +4,13 @@ namespace picsym {
 
 void ThreadActivity::start() {
     is_working = true;
-    thread = new boost::thread(&ThreadActivity::threadFunction, this);
+    thread.reset(new boost::thread(&ThreadActivity::threadFunction, this));
 }
 
 void ThreadActivity::stop() {
     is_working = false;
-    if (thread) {
+    if (thread.get()) {
         thread->join();
-        delete thread;
-        thread = 0;
     }
 }
 
