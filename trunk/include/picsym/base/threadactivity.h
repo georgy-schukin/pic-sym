@@ -3,6 +3,7 @@
 #ifndef Q_MOC_RUN
 #include <boost/thread/thread.hpp>
 #include <boost/bind.hpp>
+#include <boost/scoped_ptr.hpp>
 #endif
 
 
@@ -14,7 +15,7 @@ namespace picsym {
 class ThreadActivity
 {
 private:
-    boost::thread *thread;
+    boost::scoped_ptr<boost::thread> thread;
     bool is_working;
 
 protected:
@@ -22,7 +23,7 @@ protected:
 
 public:
     ThreadActivity() : thread(0), is_working(false) {}
-    ~ThreadActivity() {
+    virtual ~ThreadActivity() {
         stop();
     }
 

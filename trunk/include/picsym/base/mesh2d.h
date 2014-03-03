@@ -11,7 +11,7 @@ namespace picsym {
 template <class T>
 class Mesh2D {
 protected:
-    typename Array<T> elems;
+    Array<T> elems;
 
 private:
     size_t width;
@@ -54,7 +54,7 @@ public:
         return elems.at(c.getY()*width + c.getX());
     }
 
-    const typename Array<T>& data() const {
+    const Array<T>& data() const {
         return elems;
     }
 };
