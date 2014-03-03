@@ -16,15 +16,22 @@ private:
     mutable boost::mutex mutex;    
 
 private:
-    CellRange my_cells;
+    CellRange my_cells;      
+    size_t id;
 
 private:
-    size_t id;
-    std::map<size_t, INode*> neighbours;
-    std::map<size_t, size_t> curr_load;
+    typedef std::map<size_t, INode*> NeighNodeMap;
+    typedef std::map<size_t, size_t> NeighLoadMap;
+    NeighNodeMap neighbours;
+    NeighLoadMap neighbours_load;
 
 private:
     void threadFunction();
+
+private:
+    void balance();
+    bool isMinloaded(const size_t& load);
+    CellRange takeCells(const size_t& load, const bool& from_back = true);
 
 public:
     NodeThread(const size_t& i) : id(i) {}

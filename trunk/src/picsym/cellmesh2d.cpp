@@ -48,10 +48,7 @@ void CellMesh2D::draw(QGraphicsScene &scene) {
             const int color = int((float(val)/float(max_val + 1))*255.0);
             scene.addRect(QRectF(x*10, y*10, 8, 8), QPen(), QBrush(QColor(color, 0, 0)));
         }
-    }
-
-    QGraphicsTextItem *item = scene.addText(QString::number(max_val));
-    item->setPos(400, 10);
+    }    
 }
 
 }

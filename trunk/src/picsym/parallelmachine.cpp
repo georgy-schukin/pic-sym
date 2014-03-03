@@ -1,5 +1,6 @@
 #include "picsym/parallelmachine.h"
 #include "picsym/base/slicer.h"
+#include <QGraphicsTextItem>
 
 namespace picsym {
 
@@ -26,6 +27,14 @@ void ParallelMachine::stop() {
 }
 
 void ParallelMachine::draw(QGraphicsScene &scene) {
+    std::vector<size_t> loads;
+    for (NodeThreadArray::iterator it = threads.begin(); it != threads.end(); it++)
+        loads.push_back(it->getCurrentLoad());
+
+    for (size_t i = 0; i < loads.size(); i++) {
+        QGraphicsTextItem *item = scene.addText(QString::number(loads[i]));
+        item->setPos(10, i*20 + 10);
+    }
 
 }
 
