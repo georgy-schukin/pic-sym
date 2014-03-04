@@ -44,9 +44,10 @@ void ParallelMachine::draw(QGraphicsScene &scene) {
 
     QString text = "";
     for (size_t i = 0; i < loads.size(); i++) {
-        text += QString("%1 : %2 (%3)\n").arg(i).arg(loads[i]).arg(std::accumulate(loads.begin(), loads.end(), 0));
+        text += QString("%1 : %2\n").arg(i).arg(loads[i]);
     }    
-    text += QString("Max - min : %1\n").arg(max - min);
+    text += QString("Total : %1\n").arg(std::accumulate(loads.begin(), loads.end(), 0));
+    text += QString("Max diff : %1\n").arg(max - min);
 
     scene.addText(text);
 }
