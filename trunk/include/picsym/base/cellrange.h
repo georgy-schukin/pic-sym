@@ -20,6 +20,7 @@ private:
 
 public:
     CellRange() {}        
+    CellRange(const CellRange& r) : cells(r.cells) {}
     ~CellRange() {}  
 
     const std::list<Cell>& getCells() const {
@@ -62,9 +63,11 @@ public:
 
     Cell removeFromFront();
     Cell removeFromBack();
+    Cell remove(const bool& from_back = true);
 
     Cell splitFront(const size_t& particles_to_take);
     Cell splitBack(const size_t& particles_to_take);
+    Cell split(const size_t& particles_to_take, const bool& from_back = true);
 };
 
 }
