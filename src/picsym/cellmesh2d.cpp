@@ -30,7 +30,7 @@ void CellMesh2D::initExplosion(const size_t& max_value) {
         for (size_t x = 0; x < getWidth(); x++) {
             const double rx = min_x + x*step_x;
             const double ry = min_y + y*step_y;
-            const double val = 1.0 - (rx*rx + ry*ry);
+            const double val = 0.5 - (rx*rx + ry*ry);
             operator ()(y, x).setNumOfParticles(val > 0 ? val*max_value : 0);
         }
     }

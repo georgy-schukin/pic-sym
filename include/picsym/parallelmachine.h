@@ -21,7 +21,9 @@ private:
 
 public:
     ParallelMachine() {}    
-    ~ParallelMachine() {}
+    ~ParallelMachine() {
+        stop();
+    }
 
     void start(const size_t& num_of_nodes, const CellMesh2D& mesh);
     void stop();

@@ -1,6 +1,7 @@
 #include "picsym/parallelmachine.h"
 #include "picsym/base/slicer.h"
 #include <QGraphicsTextItem>
+#include <numeric>
 
 namespace picsym {
 
@@ -17,6 +18,13 @@ void ParallelMachine::start(const size_t& num_of_nodes, const CellMesh2D& mesh) 
         start += part_sizes[node];
     }
 
+    for (size_t node = 0; node < threads.size(); node++) { // build linear topology
+        if (node > 0)
+            threads[node].addNeighbour(&threads[node - 1]); // left neighbour
+        if (node < threads.size() - 1)
+            threads[node].addNeighbour(&threads[node + 1]); // right neighbour
+    }
+
     for (NodeThreadArray::iterator it = threads.begin(); it != threads.end(); it++)
         it->start();
 }
@@ -31,11 +39,16 @@ void ParallelMachine::draw(QGraphicsScene &scene) {
     for (NodeThreadArray::iterator it = threads.begin(); it != threads.end(); it++)
         loads.push_back(it->getCurrentLoad());
 
-    for (size_t i = 0; i < loads.size(); i++) {
-        QGraphicsTextItem *item = scene.addText(QString::number(loads[i]));
-        item->setPos(10, i*20 + 10);
-    }
+    const size_t min = *(std::min_element(loads.begin(), loads.end()));
+    const size_t max = *(std::max_element(loads.begin(), loads.end()));
 
+    QString text = "";
+    for (size_t i = 0; i < loads.size(); i++) {
+        text += QString("%1 : %2 (%3)\n").arg(i).arg(loads[i]).arg(std::accumulate(loads.begin(), loads.end(), 0));
+    }    
+    text += QString("Max - min : %1\n").arg(max - min);
+
+    scene.addText(text);
 }
 
 }
