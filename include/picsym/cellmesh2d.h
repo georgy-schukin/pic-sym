@@ -19,9 +19,9 @@ public:
     }
 
     CellRange getRange(const size_t& start, const size_t& end) const;
+    size_t getNumOfParticles() const;
 
     void initIds();
-
     void initExplosion(const size_t& max_value);
 
     void draw(QGraphicsScene& scene);

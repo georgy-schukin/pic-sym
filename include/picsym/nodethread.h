@@ -8,6 +8,7 @@
 #include "base/threadactivity.h"
 #include <map>
 #include <queue>
+#include <QGraphicsScene>
 
 namespace picsym {
 
@@ -19,7 +20,7 @@ private:
 
 private:
     CellRange my_cells;      
-    size_t id;
+    size_t id;    
 
 private:
     typedef std::map<size_t, INode*> NeighNodeMap;
@@ -67,6 +68,9 @@ public:
     void requestCells(const size_t& src_id, const size_t& load);
 
     size_t getCurrentLoad() const;
+    size_t getMaxNumOfParticles() const; // get num of particles in max loaded cell
+
+    void drawCells(QGraphicsScene& scene, const QColor& base_color, const size_t& mesh_size, const size_t& max_num_of_particles) const;
 };
 
 }

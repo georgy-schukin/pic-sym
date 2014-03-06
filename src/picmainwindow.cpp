@@ -9,10 +9,10 @@ PICMainWindow::PICMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);    
 
-    ui->graphicsView->setScene(&mesh_scene);
+    ui->graphicsView->setScene(&cells_scene);
     ui->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-    ui->graphicsView_2->setScene(&machine_scene);
+    ui->graphicsView_2->setScene(&load_scene);
     ui->graphicsView_2->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 }
 
@@ -24,10 +24,7 @@ PICMainWindow::~PICMainWindow()
 void PICMainWindow::on_startButton_clicked()
 {    
     const size_t mesh_size = ui->sizeBox->value();
-    const size_t num_of_nodes = ui->nodesBox->value();
-
-    mesh_scene.clear();
-    machine_scene.clear();
+    const size_t num_of_nodes = ui->nodesBox->value();    
 
     mesh.setDimensions(mesh_size, mesh_size);
     mesh.initIds();
@@ -64,9 +61,9 @@ void PICMainWindow::on_nodesBox_valueChanged(int arg1)
 }
 
 void PICMainWindow::draw() {
-    mesh_scene.clear();
-    machine_scene.clear();
+    cells_scene.clear();
+    load_scene.clear();
 
-    mesh.draw(mesh_scene);
-    machine.draw(machine_scene);
+    machine.drawCells(cells_scene);
+    machine.drawLoad(load_scene);
 }

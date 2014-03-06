@@ -7,7 +7,7 @@ void Slicer::slice(const size_t& length, const size_t& num, std::vector<size_t>&
     const size_t rest = length % num;
 
     for (size_t i = 0; i < num; i++) {
-        const size_t slice_size = (i < rest) ? base_size : base_size + 1;
+        const size_t slice_size = (i < rest) ? base_size + 1: base_size;
         result.push_back(slice_size);
     }
 }

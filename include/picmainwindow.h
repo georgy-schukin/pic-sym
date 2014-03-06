@@ -32,7 +32,7 @@ private slots:
 
 private:
     Ui::PICMainWindow *ui;    
-    QGraphicsScene mesh_scene, machine_scene;
+    QGraphicsScene cells_scene, load_scene;
 
     picsym::CellMesh2D mesh;
     picsym::ParallelMachine machine;

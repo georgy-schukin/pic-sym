@@ -1,4 +1,5 @@
 #include "picsym/nodethread.h"
+#include "picsym/base/hilbert.h"
 
 namespace picsym {
 
@@ -95,7 +96,7 @@ void NodeThread::processRequest(const size_t &src_id, const size_t &load) {
     boost::unique_lock<boost::mutex> lock(mutex);
 
     const size_t current_load = getCurrentLoad();
-    const size_t load_to_give = (current_load/2 > load) ? load : current_load/2; // take no more than half of current load
+    const size_t load_to_give = (current_load/2 > load) ? load : current_load/2; // give no more than a half of the current load
     neighbours[src_id]->sendCells(id, takeCells(load_to_give, (src_id > id)));
 }
 
@@ -108,7 +109,7 @@ size_t NodeThread::getCurrentLoad() const {
 
 CellRange NodeThread::takeCells(const size_t& load, const bool& from_back) {
     size_t accumulated_load = 0;
-    CellRange cells_to_give;
+    CellRange cells_to_give;    
 
     while ((accumulated_load < load) && !my_cells.isEmpty()) {
         const size_t next_part = (from_back) ? my_cells.back().getNumOfParticles() : my_cells.front().getNumOfParticles();
@@ -126,9 +127,32 @@ CellRange NodeThread::takeCells(const size_t& load, const bool& from_back) {
 size_t NodeThread::getMaxLoadedNode() {
     size_t max = neighbours_load.begin()->first;
     for (NeighLoadMap::iterator it = neighbours_load.begin(); it != neighbours_load.end(); it++)
-        if (neighbours_load[max] < it->second)
+        if (neighbours_load.at(max) < it->second)
             max = it->first;
     return max;
+}
+
+size_t NodeThread::getMaxNumOfParticles() const {
+    boost::unique_lock<boost::mutex> lock(mutex);
+    size_t max_num = 0;
+    for (CellRange::const_iterator it = my_cells.begin(); it != my_cells.end(); it++) // get max load in a cell range
+        if (max_num < it->getNumOfParticles())
+            max_num = it->getNumOfParticles();
+    return max_num;
+}
+
+void NodeThread::drawCells(QGraphicsScene &scene, const QColor &base_color, const size_t &mesh_size, const size_t &max_num_of_particles) const {
+    boost::unique_lock<boost::mutex> lock(mutex);
+
+    const float max = (max_num_of_particles > 0) ? float(max_num_of_particles) : 1.0;
+    QPen pen(base_color);
+
+    for (CellRange::const_iterator it = my_cells.begin(); it != my_cells.end(); it++) {
+        const Coord2D coord = Hilbert::distanceToCoord(it->getId(), mesh_size);
+        const float scale = float(it->getNumOfParticles())/max;
+        const QColor cell_color(base_color.red()*scale, base_color.green()*scale, base_color.blue()*scale, base_color.alpha()*scale);
+        scene.addRect(QRectF(coord.getX()*10, coord.getY()*10, 8, 8), pen, QBrush(cell_color));
+    }
 }
 
 
