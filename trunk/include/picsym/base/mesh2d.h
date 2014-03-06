@@ -38,12 +38,12 @@ public:
         return height;
     }    
 
-    const T& operator()(const size_t& row, const size_t& col) const {
-        return elems.at(row*width + col);
+    const T& operator()(const size_t& x, const size_t& y) const {
+        return elems.at(y*width + x);
     }
 
-    T& operator()(const size_t& row, const size_t& col) {
-        return elems.at(row*width + col);
+    T& operator()(const size_t& x, const size_t& y) {
+        return elems.at(y*width + x);
     }
 
     const T& operator()(const Coord2D& c) const {

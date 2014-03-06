@@ -18,6 +18,11 @@ private:
 
 private:    
     NodeThreadArray threads;
+    size_t mesh_size;
+    size_t total_num_of_particles;
+
+private:
+    size_t getMaxNumOfParticles() const;
 
 public:
     ParallelMachine() {}    
@@ -28,7 +33,8 @@ public:
     void start(const size_t& num_of_nodes, const CellMesh2D& mesh);
     void stop();
 
-    void draw(QGraphicsScene& scene);
+    void drawLoad(QGraphicsScene& scene);
+    void drawCells(QGraphicsScene& scene);
 };
 
 }

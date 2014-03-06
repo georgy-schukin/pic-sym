@@ -6,8 +6,10 @@
 namespace picsym {
 
 void ParallelMachine::start(const size_t& num_of_nodes, const CellMesh2D& mesh) {
-    std::vector<size_t> part_sizes;
+    mesh_size = mesh.getWidth();
+    total_num_of_particles = mesh.getNumOfParticles();
 
+    std::vector<size_t> part_sizes;    
     Slicer::slice(mesh.getNumOfCells(), num_of_nodes, part_sizes);
 
     threads.clear();
@@ -34,7 +36,7 @@ void ParallelMachine::stop() {
         it->stop();
 }
 
-void ParallelMachine::draw(QGraphicsScene &scene) {
+void ParallelMachine::drawLoad(QGraphicsScene &scene) {
     std::vector<size_t> loads;
     for (NodeThreadArray::iterator it = threads.begin(); it != threads.end(); it++)
         loads.push_back(it->getCurrentLoad());
@@ -50,6 +52,35 @@ void ParallelMachine::draw(QGraphicsScene &scene) {
     text += QString("Max diff : %1\n").arg(max - min);
 
     scene.addText(text);
+}
+
+void ParallelMachine::drawCells(QGraphicsScene &scene) {
+    const static size_t numOfColors = 13;
+    const static QColor colors[numOfColors] = {Qt::red, Qt::green, Qt::blue, Qt::yellow, Qt::cyan, Qt::magenta,
+                                    Qt::darkRed, Qt::darkGreen, Qt::darkBlue, Qt::darkYellow, Qt::darkCyan, Qt::darkMagenta, Qt::gray};
+
+    const size_t max_num = getMaxNumOfParticles();
+
+    for (NodeThreadArray::const_iterator it = threads.begin(); it != threads.end(); it++) { // draw cells of each node/thread
+        const size_t& node_id = it->getId();
+        const QColor& node_color = colors[node_id % numOfColors];
+
+        it->drawCells(scene, node_color, mesh_size, max_num);
+
+        QGraphicsRectItem *rect = scene.addRect(QRectF(node_id*20, (mesh_size + 2)*10, 10, 10), QPen(Qt::black), QBrush(node_color));
+        QGraphicsTextItem *text = scene.addText(QString::number(node_id));
+        text->setPos(rect->boundingRect().left(), rect->boundingRect().bottom());
+    }
+}
+
+size_t ParallelMachine::getMaxNumOfParticles() const {
+    size_t max_num = 0;
+    for (NodeThreadArray::const_iterator it = threads.begin(); it != threads.end(); it++) {
+        const size_t num = it->getMaxNumOfParticles();
+        if (num > max_num)
+            max_num = num;
+    }
+    return max_num;
 }
 
 }

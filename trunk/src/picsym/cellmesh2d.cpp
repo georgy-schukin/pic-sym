@@ -12,10 +12,17 @@ CellRange CellMesh2D::getRange(const size_t &start, const size_t &end) const {
     return range;
 }
 
+size_t CellMesh2D::getNumOfParticles() const {
+    size_t total_num_of_particles = 0;
+    for (Array<Cell>::const_iterator it = data().begin(); it != data().end(); it++)
+        total_num_of_particles += it->getNumOfParticles();
+    return total_num_of_particles;
+}
+
 void CellMesh2D::initIds() {
-    for (size_t y = 0; y < getHeight(); y++)
-        for (size_t x = 0; x < getWidth(); x++)
-            operator ()(y, x).setId(Hilbert::coordToDistance(x, y, getWidth()));
+    for (size_t x = 0; x < getWidth(); x++)
+        for (size_t y = 0; y < getHeight(); y++)
+            operator ()(x, y).setId(Hilbert::coordToDistance(x, y, getWidth()));
 }
 
 void CellMesh2D::initExplosion(const size_t& max_value) {
@@ -26,12 +33,12 @@ void CellMesh2D::initExplosion(const size_t& max_value) {
     const double step_x = (max_x - min_x) / getWidth();
     const double step_y = (max_y - min_y) / getHeight();
 
-    for (size_t y = 0; y < getHeight(); y++) {
-        for (size_t x = 0; x < getWidth(); x++) {
+    for (size_t x = 0; x < getWidth(); x++) {
+        for (size_t y = 0; y < getHeight(); y++) {
             const double rx = min_x + x*step_x;
             const double ry = min_y + y*step_y;
             const double val = 0.5 - (rx*rx + ry*ry);
-            operator ()(y, x).setNumOfParticles(val > 0 ? val*max_value : 0);
+            operator ()(x, y).setNumOfParticles(val > 0 ? val*max_value : 0);
         }
     }
 }

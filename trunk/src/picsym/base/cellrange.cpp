@@ -30,7 +30,7 @@ void CellRange::add(const Cell& cell) {
     if (isEmpty())
         cells.push_back(cell);
     else {
-        const size_t& id = cell.getId();
+        const size_t id = cell.getId();
         if (id < cells.front().getId())
             cells.push_front(cell); // push to left
         else if (id > cells.back().getId())
