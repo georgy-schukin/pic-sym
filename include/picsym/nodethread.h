@@ -68,9 +68,11 @@ public:
     void requestCells(const size_t& src_id, const size_t& load);
 
     size_t getCurrentLoad() const;
-    size_t getMaxNumOfParticles() const; // get num of particles in max loaded cell
+    size_t getMaxCellLoad() const;
+    size_t getCurrentNumOfCells() const;
+    size_t getCurrentNumOfParticles() const;
 
-    void drawCells(QGraphicsScene& scene, const QColor& base_color, const size_t& mesh_size, const size_t& max_num_of_particles) const;
+    void drawCells(QGraphicsScene& scene, const QColor& base_color, const size_t& mesh_size, const size_t& max_cell_load) const;
 };
 
 }

@@ -24,7 +24,7 @@ public:
     }
     ~Mesh2D() {}
 
-    void setDimensions(const size_t& w, const size_t& h) {
+    virtual void init(const size_t& w, const size_t& h) {
         width = w;
         height = h;
         elems.resize(width*height);
@@ -46,11 +46,11 @@ public:
         return elems.at(y*width + x);
     }
 
-    const T& operator()(const Coord2D& c) const {
+    const T& operator()(const Coord2D<size_t>& c) const {
         return elems.at(c.getY()*width + c.getX());
     }
 
-    T& operator()(const Coord2D& c) {
+    T& operator()(const Coord2D<size_t>& c) {
         return elems.at(c.getY()*width + c.getX());
     }
 

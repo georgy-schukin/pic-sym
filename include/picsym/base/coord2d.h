@@ -4,27 +4,34 @@
 
 namespace picsym {
 
-class Coord2D
+template<class T>
+class Coord2D      
 {
 private:
-    size_t x;
-    size_t y;
+    T x;
+    T y;
 public:
     Coord2D() : x(0), y(0) {}
-    Coord2D(const size_t& xx, const size_t& yy) : x(xx), y(yy) {}
+    Coord2D(const T& xx, const T& yy) : x(xx), y(yy) {}
+    Coord2D(const Coord2D<T>& c) : x(c.x), y(c.y) {}
     ~Coord2D() {}
 
-    void set(const size_t& xx, const size_t& yy) {
+    void set(const T& xx, const T& yy) {
         x = xx;
         y = yy;
     }
 
-    const size_t& getX() const {
+    const T& getX() const {
         return x;
     }
 
-    const size_t& getY() const {
+    const T& getY() const {
         return y;
+    }
+
+    void operator=(const Coord2D<T>& c) {
+        x = c.getX();
+        y = c.getY();
     }
 };
 
