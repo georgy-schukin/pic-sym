@@ -18,7 +18,6 @@ INCLUDEPATH += $$PWD/include
 SOURCES += src/main.cpp\
         src/picmainwindow.cpp \
     src/picsym/base/hilbert.cpp \
-    src/picviz.cpp \
     src/picsym/base/slicer.cpp \
     src/picsym/parallelmachine.cpp \
     src/picsym/cellmesh2d.cpp \
@@ -29,7 +28,6 @@ SOURCES += src/main.cpp\
 
 HEADERS  += include/picmainwindow.h \    
     include/picsym/base/mesh2d.h \
-    include/picviz.h \
     include/picsym/base/hilbert.h \
     include/picsym/base/slicer.h \
     include/picsym/base/cell.h \
@@ -41,6 +39,8 @@ HEADERS  += include/picmainwindow.h \
     include/picsym/cellmesh2d.h \
     include/picsym/base/cellrange.h \
     include/picsym/base/coord2d.h \
-    include/picsym/base/threadactivity.h
+    include/picsym/base/threadactivity.h \
+    include/picsym/base/particle.h \
+    include/picsym/base/defines.h
 
 FORMS    += picmainwindow.ui

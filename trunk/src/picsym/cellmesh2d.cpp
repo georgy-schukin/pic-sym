@@ -4,6 +4,11 @@
 
 namespace picsym {
 
+void CellMesh2D::init(const size_t& width, const size_t& height) {
+    Mesh2D::init(width, height);
+    initIds();
+}
+
 CellRange CellMesh2D::getRange(const size_t &start, const size_t &end) const {
     CellRange range;
     for (size_t dist = start; dist < end; dist++) {
@@ -19,13 +24,7 @@ size_t CellMesh2D::getNumOfParticles() const {
     return total_num_of_particles;
 }
 
-void CellMesh2D::initIds() {
-    for (size_t x = 0; x < getWidth(); x++)
-        for (size_t y = 0; y < getHeight(); y++)
-            operator ()(x, y).setId(Hilbert::coordToDistance(x, y, getWidth()));
-}
-
-void CellMesh2D::initExplosion(const size_t& max_value) {
+void CellMesh2D::generateExplosion(const size_t& max_value) {
     const double max_x = 1.0; // scale mesh to -1:1 square
     const double min_x = -1.0;
     const double max_y = 1.0;
@@ -56,6 +55,12 @@ void CellMesh2D::draw(QGraphicsScene &scene) {
             scene.addRect(QRectF(x*10, y*10, 8, 8), QPen(), QBrush(QColor(color, 0, 0)));
         }
     }    
+}
+
+void CellMesh2D::initIds() {
+    for (size_t x = 0; x < getWidth(); x++)
+        for (size_t y = 0; y < getHeight(); y++)
+            operator ()(x, y).setId(Hilbert::coordToDistance(x, y, getWidth()));
 }
 
 }

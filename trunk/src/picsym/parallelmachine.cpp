@@ -1,12 +1,14 @@
 #include "picsym/parallelmachine.h"
 #include "picsym/base/slicer.h"
 #include <QGraphicsTextItem>
+#include <QFontMetrics>
 #include <numeric>
 
 namespace picsym {
 
 void ParallelMachine::start(const size_t& num_of_nodes, const CellMesh2D& mesh) {
     mesh_size = mesh.getWidth();
+    total_num_of_cells = mesh.getNumOfCells();
     total_num_of_particles = mesh.getNumOfParticles();
 
     std::vector<size_t> part_sizes;    
@@ -36,36 +38,34 @@ void ParallelMachine::stop() {
         it->stop();
 }
 
-void ParallelMachine::drawLoad(QGraphicsScene &scene) {
-    std::vector<size_t> loads;
-    for (NodeThreadArray::iterator it = threads.begin(); it != threads.end(); it++)
-        loads.push_back(it->getCurrentLoad());
-
-    const size_t min = *(std::min_element(loads.begin(), loads.end()));
-    const size_t max = *(std::max_element(loads.begin(), loads.end()));
-
-    QString text = "";
-    for (size_t i = 0; i < loads.size(); i++) {
-        text += QString("%1 : %2\n").arg(i).arg(loads[i]);
-    }    
-    text += QString("Total : %1\n").arg(std::accumulate(loads.begin(), loads.end(), 0));
-    text += QString("Max diff : %1\n").arg(max - min);
-
-    scene.addText(text);
+size_t min(const std::vector<size_t>& v) {
+    return *(std::min_element(v.begin(), v.end()));
 }
 
-void ParallelMachine::drawCells(QGraphicsScene &scene) {
-    const static size_t numOfColors = 13;
-    const static QColor colors[numOfColors] = {Qt::red, Qt::green, Qt::blue, Qt::yellow, Qt::cyan, Qt::magenta,
-                                    Qt::darkRed, Qt::darkGreen, Qt::darkBlue, Qt::darkYellow, Qt::darkCyan, Qt::darkMagenta, Qt::gray};
+size_t max(const std::vector<size_t>& v) {
+    return *(std::max_element(v.begin(), v.end()));
+}
 
-    const size_t max_num = getMaxNumOfParticles();
+size_t diff(const std::vector<size_t>& v) {
+    return max(v) - min(v);
+}
+
+size_t len(const size_t& val, const size_t& max_val, const size_t& length) {
+    return length*(float(val)/float(max_val));
+}
+
+const size_t NUM_OF_COLORS = 13;
+const QColor colors[NUM_OF_COLORS] = {Qt::red, Qt::green, Qt::blue, Qt::yellow, Qt::cyan, Qt::magenta,
+                                Qt::darkRed, Qt::darkGreen, Qt::darkBlue, Qt::darkYellow, Qt::darkCyan, Qt::darkMagenta, Qt::gray};
+
+void ParallelMachine::drawCells(QGraphicsScene &scene) {
+    const size_t max_cell_load = getMaxCellLoad();
 
     for (NodeThreadArray::const_iterator it = threads.begin(); it != threads.end(); it++) { // draw cells of each node/thread
         const size_t& node_id = it->getId();
-        const QColor& node_color = colors[node_id % numOfColors];
+        const QColor& node_color = colors[node_id % NUM_OF_COLORS];
 
-        it->drawCells(scene, node_color, mesh_size, max_num);
+        it->drawCells(scene, node_color, mesh_size, max_cell_load);
 
         QGraphicsRectItem *rect = scene.addRect(QRectF(node_id*20, (mesh_size + 2)*10, 10, 10), QPen(Qt::black), QBrush(node_color));
         QGraphicsTextItem *text = scene.addText(QString::number(node_id));
@@ -73,10 +73,46 @@ void ParallelMachine::drawCells(QGraphicsScene &scene) {
     }
 }
 
-size_t ParallelMachine::getMaxNumOfParticles() const {
+QRectF drawRect(QGraphicsScene &scene, const size_t& x, const size_t& y, const size_t& w, const size_t& h, const QColor& color) {
+    return scene.addRect(QRectF(x, y, w, h), QPen(), QBrush(color))->boundingRect();
+}
+
+QRectF drawText(QGraphicsScene &scene, const QString& string, const size_t& x, const size_t& y) {
+    QGraphicsTextItem *text = scene.addText(string);
+    text->setPos(x, y);
+    return text->boundingRect();
+}
+
+void ParallelMachine::drawLoad(QGraphicsScene &scene) {
+    std::vector<size_t> load, n_cells, n_particles;
+    for (NodeThreadArray::iterator it = threads.begin(); it != threads.end(); it++) {
+        load.push_back(it->getCurrentLoad());
+        n_cells.push_back(it->getCurrentNumOfCells());
+        n_particles.push_back(it->getCurrentNumOfParticles());
+    }
+
+    QFontMetrics metrics(scene.font());
+    const size_t elem_height = (metrics.height() > 20) ? metrics.height() : 20;
+    const size_t total_load = std::accumulate(load.begin(), load.end(), 0);
+
+    size_t pos_x = 0, pos_y = 0;
+    for (size_t i = 0; i < threads.size(); i++) {
+        pos_x = drawText(scene, QString("%1").arg(i, -3), 0, pos_y).right();
+        pos_x = drawRect(scene, pos_x, pos_y, len(load[i], total_load, 100), elem_height, Qt::red).right();
+        pos_x = drawRect(scene, pos_x, pos_y, len(n_cells[i], total_num_of_cells, 100), elem_height, Qt::green).right();
+        pos_x = drawRect(scene, pos_x, pos_y, len(n_particles[i], total_num_of_particles, 100), elem_height, Qt::blue).right();
+        pos_x = drawText(scene, QString("L: %1, C: %2, P: %3").
+                         arg(load[i]).arg(n_cells[i]).arg(n_particles[i]), pos_x, pos_y).right();
+        pos_y += elem_height + 2;
+    }
+    drawText(scene, QString("Max diff: L: %1, C: %2, P: %3").
+             arg(diff(load)).arg(diff(n_cells)).arg(diff(n_particles)), 0, pos_y).right();
+}
+
+size_t ParallelMachine::getMaxCellLoad() const {
     size_t max_num = 0;
     for (NodeThreadArray::const_iterator it = threads.begin(); it != threads.end(); it++) {
-        const size_t num = it->getMaxNumOfParticles();
+        const size_t num = it->getMaxCellLoad();
         if (num > max_num)
             max_num = num;
     }

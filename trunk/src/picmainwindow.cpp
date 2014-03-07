@@ -1,7 +1,5 @@
 #include "picmainwindow.h"
 #include "ui_picmainwindow.h"
-//#include "picsym/base/hilbert.h"
-//#include "picsym/slicer.h"
 
 PICMainWindow::PICMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -26,9 +24,8 @@ void PICMainWindow::on_startButton_clicked()
     const size_t mesh_size = ui->sizeBox->value();
     const size_t num_of_nodes = ui->nodesBox->value();    
 
-    mesh.setDimensions(mesh_size, mesh_size);
-    mesh.initIds();
-    mesh.initExplosion(100);    
+    mesh.init(mesh_size, mesh_size);
+    mesh.generateExplosion(100);
 
     machine.start(num_of_nodes, mesh);        
 

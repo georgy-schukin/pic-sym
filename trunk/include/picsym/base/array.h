@@ -11,7 +11,7 @@ namespace picsym {
 template <class T>
 class Array
 {
-private:
+private:        
     typename std::vector<T> data;
 
 public:

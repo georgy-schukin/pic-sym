@@ -14,7 +14,7 @@ size_t Hilbert::coordToDistance(const size_t& x, const size_t& y, const size_t& 
     return dist;
 }
 
-size_t Hilbert::coordToDistance(const Coord2D& coord, const size_t& mesh_size) {
+size_t Hilbert::coordToDistance(const Coord2D<size_t>& coord, const size_t& mesh_size) {
     return Hilbert::coordToDistance(coord.getX(), coord.getY(), mesh_size);
 }
 
@@ -31,10 +31,10 @@ void Hilbert::distanceToCoord(const size_t& dist, const size_t& mesh_size, size_
     }
 }
 
-Coord2D Hilbert::distanceToCoord(const size_t& dist, const size_t& mesh_size) {
+Coord2D<size_t> Hilbert::distanceToCoord(const size_t& dist, const size_t& mesh_size) {
     size_t x = 0, y = 0;
     Hilbert::distanceToCoord(dist, mesh_size, x, y);
-    return Coord2D(x, y);
+    return Coord2D<size_t>(x, y);
 }
 
 void Hilbert::rotate(size_t& x, size_t& y, const size_t& mesh_size, const size_t& rx, const size_t& ry) {
