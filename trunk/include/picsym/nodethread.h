@@ -37,6 +37,7 @@ private:
     void threadFunction();
 
 private:
+    void compute();
     void balance();
     void update();
     void processIncoming();

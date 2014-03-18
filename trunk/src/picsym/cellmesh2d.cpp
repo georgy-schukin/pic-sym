@@ -1,12 +1,64 @@
 #include "picsym/cellmesh2d.h"
 #include "picsym/base/hilbert.h"
+#include <cmath>
 #include <QGraphicsTextItem>
 
 namespace picsym {
 
-void CellMesh2D::init(const size_t& width, const size_t& height) {
-    Mesh2D::init(width, height);
-    initIds();
+void CellMesh2D::generateExplosion(const size_t &max_value) {
+    for (size_t x = 0; x < getWidth(); x++) {
+        for (size_t y = 0; y < getHeight(); y++) {                        
+            operator ()(x, y).setParticles(generateExplosionParticles(x, y, max_value));
+        }
+    }
+}
+
+std::list<Particle> CellMesh2D::generateExplosionParticles(const size_t &x, const size_t &y, const size_t &max_value) {
+    std::list<Particle> particles;
+    const double step_x = bounds.width() / getWidth();
+    const double step_y = bounds.height() / getHeight();
+    const double rx = bounds.getLeft() + x*step_x;
+    const double ry = bounds.getBottom() + y*step_y;
+    const double cx = bounds.getLeft() + bounds.width() / 2.0;
+    const double cy = bounds.getBottom() + bounds.height() / 2.0;
+
+    const double val = 0.5 - (rx*rx + ry*ry);
+    const size_t num_of_particles = val > 0 ? val*max_value : 0;
+    for (size_t n = 0; n < num_of_particles; n++) {
+        const double px = rx + step_x*double(rand() % 1000)/1000.0;
+        const double py = ry + step_y*double(rand() % 1000)/1000.0;
+        particles.push_back(Particle(Coord2D<Real>(px, py), Coord2D<Real>(px - cx, py - cy)));
+    }
+
+    return particles;
+}
+
+void CellMesh2D::draw(QGraphicsScene &scene) {
+    size_t max_val = 0;
+    for (Array<Cell>::const_iterator it = data().begin(); it != data().end(); it++)
+        if (max_val < it->getNumOfParticles())
+            max_val = it->getNumOfParticles();
+    for (size_t y = 0; y < getHeight(); y++) {
+        for (size_t x = 0; x < getWidth(); x++) {
+            const size_t val = operator ()(x, y).getNumOfParticles();
+            const int color = int((float(val)/float(max_val + 1))*255.0);
+            scene.addRect(QRectF(x*10, y*10, 8, 8), QPen(), QBrush(QColor(color, 0, 0)));
+        }
+    }    
+}
+
+void CellMesh2D::init() {
+    const double step_x = bounds.width() / getWidth();
+    const double step_y = bounds.height() / getHeight();
+    for (size_t x = 0; x < getWidth(); x++) {
+        for (size_t y = 0; y < getHeight(); y++) {
+            Cell& cell = operator ()(x, y);
+            const double rx = bounds.getLeft() + x*step_x;
+            const double ry = bounds.getBottom() + y*step_y;
+            cell.setBounds(Rect2D<Real>(rx, rx + step_x, ry, ry + step_y));
+            cell.setId(Hilbert::coordToDistance(x, y, getWidth()));
+        }
+    }
 }
 
 CellRange CellMesh2D::getRange(const size_t &start, const size_t &end) const {
@@ -22,45 +74,6 @@ size_t CellMesh2D::getNumOfParticles() const {
     for (Array<Cell>::const_iterator it = data().begin(); it != data().end(); it++)
         total_num_of_particles += it->getNumOfParticles();
     return total_num_of_particles;
-}
-
-void CellMesh2D::generateExplosion(const size_t& max_value) {
-    const double max_x = 1.0; // scale mesh to -1:1 square
-    const double min_x = -1.0;
-    const double max_y = 1.0;
-    const double min_y = -1.0;
-    const double step_x = (max_x - min_x) / getWidth();
-    const double step_y = (max_y - min_y) / getHeight();
-
-    for (size_t x = 0; x < getWidth(); x++) {
-        for (size_t y = 0; y < getHeight(); y++) {
-            const double rx = min_x + x*step_x;
-            const double ry = min_y + y*step_y;
-            const double val = 0.5 - (rx*rx + ry*ry);
-            operator ()(x, y).setNumOfParticles(val > 0 ? val*max_value : 0);
-        }
-    }
-}
-
-void CellMesh2D::draw(QGraphicsScene &scene) {
-    size_t max_val = 0;
-    for (Array<Cell>::const_iterator it = data().begin(); it != data().end(); it++)
-        if (max_val < it->getNumOfParticles())
-            max_val = it->getNumOfParticles();
-
-    for (size_t y = 0; y < getHeight(); y++) {
-        for (size_t x = 0; x < getWidth(); x++) {
-            const size_t val = operator ()(x, y).getNumOfParticles();
-            const int color = int((float(val)/float(max_val + 1))*255.0);
-            scene.addRect(QRectF(x*10, y*10, 8, 8), QPen(), QBrush(QColor(color, 0, 0)));
-        }
-    }    
-}
-
-void CellMesh2D::initIds() {
-    for (size_t x = 0; x < getWidth(); x++)
-        for (size_t y = 0; y < getHeight(); y++)
-            operator ()(x, y).setId(Hilbert::coordToDistance(x, y, getWidth()));
 }
 
 }

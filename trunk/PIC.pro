@@ -24,7 +24,8 @@ SOURCES += src/main.cpp\
     src/picsym/nodethread.cpp \
     src/picsym/base/cellrange.cpp \
     src/picsym/base/cell.cpp \
-    src/picsym/base/threadactivity.cpp
+    src/picsym/base/threadactivity.cpp \
+    src/picsym/base/particle.cpp
 
 HEADERS  += include/picmainwindow.h \    
     include/picsym/base/mesh2d.h \
@@ -41,6 +42,7 @@ HEADERS  += include/picmainwindow.h \
     include/picsym/base/coord2d.h \
     include/picsym/base/threadactivity.h \
     include/picsym/base/particle.h \
-    include/picsym/base/defines.h
+    include/picsym/base/defines.h \
+    include/picsym/base/rect2d.h
 
 FORMS    += picmainwindow.ui

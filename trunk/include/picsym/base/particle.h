@@ -33,6 +33,8 @@ public:
     const Coord2D<Real>& getVelocity() const {
         return velocity;
     }
+
+    void move();
 };
 
 }

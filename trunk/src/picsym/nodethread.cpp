@@ -5,19 +5,23 @@ namespace picsym {
 
 void NodeThread::threadFunction() {
     while (isWorking()) {
-
         update();
-
-        boost::this_thread::sleep(boost::posix_time::milliseconds(500)); // work imitation
-
+        compute();
         processIncoming();
-
         balance();
     }
 }
 
+void NodeThread::compute() {
+    for (CellRange::iterator it = my_cells.begin(); it != my_cells.end(); it++) {
+        it->compute();
+    //    boost::this_thread::sleep(boost::posix_time::milliseconds(5)); // work imitation
+    }
+    boost::this_thread::sleep(boost::posix_time::milliseconds(500)); // work imitation
+}
+
 void NodeThread::balance() {
-    boost::unique_lock<boost::mutex> lock(mutex);
+    //boost::unique_lock<boost::mutex> lock(mutex);
 
     const size_t my_load = getCurrentLoad();
     const size_t max_node = getMaxLoadedNode();
@@ -29,8 +33,7 @@ void NodeThread::balance() {
 }
 
 void NodeThread::update() {
-    boost::unique_lock<boost::mutex> lock(mutex);
-
+    //boost::unique_lock<boost::mutex> lock(mutex);
     const size_t curr_load = getCurrentLoad();
     for (NeighNodeMap::iterator it = neighbours.begin(); it != neighbours.end(); it++)
         it->second->sendLoadInfo(id, curr_load);
@@ -90,13 +93,13 @@ void NodeThread::processIncomingCells() {
 }
 
 void NodeThread::processRequest(const size_t &src_id, const size_t &load) {    
-    boost::unique_lock<boost::mutex> lock(mutex);
     const size_t current_load = getCurrentLoad();
     const size_t load_to_give = (current_load/2 > load) ? load : current_load/2; // give no more than a half of the current load
     neighbours[src_id]->sendCells(id, takeCells(load_to_give, (src_id > id)));
 }
 
-CellRange NodeThread::takeCells(const size_t& load, const bool& from_back) {    
+CellRange NodeThread::takeCells(const size_t& load, const bool& from_back) {
+    boost::unique_lock<boost::mutex> lock(mutex);
     size_t accumulated_load = 0;
     CellRange cells_to_give;    
     while ((accumulated_load < load) && !my_cells.isEmpty()) {
@@ -136,6 +139,7 @@ size_t NodeThread::getMaxLoadedNode() {
 }
 
 size_t NodeThread::getCurrentLoad() const {
+    boost::unique_lock<boost::mutex> lock(mutex);
     size_t load = 0;
     for (CellRange::const_iterator it = my_cells.begin(); it != my_cells.end(); it++)
         load += it->getLoad();
