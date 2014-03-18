@@ -2,13 +2,13 @@
 
 namespace picsym {
 
-void Cell::addParticles(const std::list<Particle>& p) {
+/*void Cell::addParticles(const std::list<Particle>& p) {
     particles.insert(particles.end(), p.begin(), p.end());
 }
 
 std::list<Particles> Cell::removeParticles(const size_t& rem_num) {
     //num_of_particles -= rem_num;
-}
+}*/
 
 Cell Cell::split(const size_t& load) {
     const size_t particles_to_take = load;
@@ -31,6 +31,10 @@ const Cell& Cell::merge(const Cell& cell) {
 
 size_t Cell::getLoad() const {
     return num_of_particles;
+}
+
+void Cell::compute() {
+
 }
 
 }

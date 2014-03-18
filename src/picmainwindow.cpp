@@ -24,7 +24,7 @@ void PICMainWindow::on_startButton_clicked()
     const size_t mesh_size = ui->sizeBox->value();
     const size_t num_of_nodes = ui->nodesBox->value();    
 
-    mesh.init(mesh_size, mesh_size);
+    mesh = picsym::CellMesh2D(mesh_size, mesh_size, picsym::Rect2D<picsym::Real>(-1, 1, 1, -1));
     mesh.generateExplosion(100);
 
     machine.start(num_of_nodes, mesh);        

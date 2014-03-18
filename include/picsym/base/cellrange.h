@@ -12,6 +12,7 @@ namespace picsym {
 class CellRange
 {
 public:
+    typedef std::list<Cell>::iterator iterator;
     typedef std::list<Cell>::const_iterator const_iterator;
     typedef std::list<Cell>::const_reverse_iterator const_reverse_iterator;
 
@@ -32,6 +33,14 @@ public:
     }
 
     const_iterator end() const {
+        return cells.end();
+    }
+
+    iterator begin() {
+        return cells.begin();
+    }
+
+    iterator end() {
         return cells.end();
     }
 

@@ -6,7 +6,6 @@
 #include <boost/scoped_ptr.hpp>
 #endif
 
-
 namespace picsym {
 
 /**

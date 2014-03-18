@@ -23,6 +23,7 @@ public:
     Array(const size_t& size) {
         resize(size);
     }
+    Array(const Array<T>& a) : data(a.data) {}
     ~Array() {}
 
     size_t getSize() const {

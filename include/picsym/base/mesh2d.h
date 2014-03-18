@@ -22,13 +22,14 @@ public:
     Mesh2D(const size_t& w, const size_t& h) : width(w), height(h) {
         elems.resize(width*height);
     }
+    Mesh2D(const Mesh2D<T>& m) : width(m.width), height(m.height), elems(m.elems) {}
     ~Mesh2D() {}
 
-    virtual void init(const size_t& w, const size_t& h) {
+    /*virtual void init(const size_t& w, const size_t& h) {
         width = w;
         height = h;
         elems.resize(width*height);
-    }      
+    } */
 
     const size_t& getWidth() const {
         return width;
