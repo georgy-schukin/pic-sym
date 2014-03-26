@@ -14,28 +14,26 @@ namespace picsym {
 class Cell {
 private:
     size_t id;
-    size_t num_of_particles;
+    //size_t num_of_particles;
     std::list<Particle> particles;
     Rect2D<Real> bounds;
+    size_t iter_num;
 
 public:
-    Cell(): id(0) {}
-    Cell(const size_t& i, const size_t& num) : id(i), num_of_particles(num){}
-    Cell(const size_t& i, const std::list<Particle>& p) : id(i), particles(p), num_of_particles(p.size()) {}
-    ~Cell() {}
-    
-    void setNumOfParticles(const size_t& num) {
-        num_of_particles = num;
-    }
+    Cell(): id(0), iter_num(0) {}
+    Cell(const size_t& i, const std::list<Particle>& p) : id(i), particles(p) {}
+    ~Cell() {}       
 
     void setParticles(const std::list<Particle>& p) {
-        particles = p;
-        num_of_particles = particles.size();
+        particles = p;        
     }
 
-    const size_t& getNumOfParticles() const {
-        //return particles.size();
-        return num_of_particles;
+    const std::list<Particle>& getParticles() const {
+        return particles;
+    }
+
+    size_t getNumOfParticles() const {
+        return particles.size();
     }
 
     void setId(const size_t& i) {
@@ -54,16 +52,16 @@ public:
         return bounds;
     }
 
-    void addParticles(const size_t& num) {
+    /*void addParticles(const size_t& num) {
         num_of_particles += num;
     }
 
     void removeParticles(const size_t& num) {
         num_of_particles -= num;
-    }
+    }*/
 
-    //void addParticles(const std::list<Particle>& p);
-    //std::list<Particles> removeParticles(const size_t& rem_num);
+    void addParticles(const std::list<Particle>& p);
+    void removeParticles(const size_t& rem_num, std::list<Particle>& removed);
 
     Cell split(const size_t& load);
     Cell split();
