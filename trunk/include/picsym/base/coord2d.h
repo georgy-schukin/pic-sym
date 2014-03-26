@@ -33,6 +33,10 @@ public:
         x = c.getX();
         y = c.getY();
     }
+
+    Coord2D<T> operator+(const Coord2D<T>& c) const {
+        return Coord2D<T>(x + c.getX(), y + c.getY());
+    }
 };
 
 }
