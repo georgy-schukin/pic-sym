@@ -1,5 +1,6 @@
 #include "picmainwindow.h"
 #include "ui_picmainwindow.h"
+#include "picsym/base/globalenv.h"
 
 PICMainWindow::PICMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -26,6 +27,9 @@ void PICMainWindow::on_startButton_clicked()
 
     mesh = picsym::CellMesh2D(mesh_size, mesh_size, picsym::Rect2D<picsym::Real>(-1, 1, 1, -1));
     mesh.generateExplosion(100);
+
+    picsym::GlobalEnvironment env(mesh.getNumOfCells(), mesh.getNumOfParticles(), mesh.getWidth(), 1.0);
+    picsym::setGlobalEnvironment(env);
 
     machine.start(num_of_nodes, mesh);        
 

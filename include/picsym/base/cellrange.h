@@ -74,10 +74,9 @@ public:
     Cell removeFromBack();
     Cell remove(const bool& from_back = true);
 
-    Cell splitFront(const size_t& particles_to_take);
-    Cell splitBack(const size_t& particles_to_take);
-    Cell split(const size_t& particles_to_take, const bool& from_back = true);
-    Cell split(const bool& from_back = true);
+    Cell splitFront(const double& load);
+    Cell splitBack(const double& load);
+    Cell split(const double& load, const bool& from_back = true);
 };
 
 }

@@ -55,20 +55,16 @@ Cell CellRange::remove(const bool& from_back) {
     return (from_back) ? removeFromBack() : removeFromFront();
 }
 
-Cell CellRange::splitFront(const size_t& particles_to_take) {
-    return cells.front().split(particles_to_take);
+Cell CellRange::splitFront(const double& load) {
+    return cells.front().split(load);
 }
 
-Cell CellRange::splitBack(const size_t& particles_to_take) {
-    return cells.back().split(particles_to_take);
+Cell CellRange::splitBack(const double& load) {
+    return cells.back().split(load);
 }
 
-Cell CellRange::split(const size_t& particles_to_take, const bool& from_back) {
-    return (from_back) ? splitBack(particles_to_take) : splitFront(particles_to_take);
-}
-
-Cell CellRange::split(const bool& from_back) {
-    return (from_back) ? cells.back().split() : cells.front().split();
+Cell CellRange::split(const double& load, const bool& from_back) {
+    return (from_back) ? splitBack(load) : splitFront(load);
 }
 
 }

@@ -20,10 +20,11 @@ private:
     NodeThreadArray threads;
     size_t mesh_size;
     size_t total_num_of_cells;
-    size_t total_num_of_particles;    
+    size_t total_num_of_particles;
 
 private:
-    size_t getMaxCellLoad() const;
+    //double getMaxCellLoad() const;
+    size_t getMaxNumOfParticlesInCell() const;
 
 public:
     ParallelMachine() {}    

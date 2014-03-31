@@ -1,9 +1,20 @@
 #include "picsym/base/cell.h"
+#include "picsym/base/globalenv.h"
 
 namespace picsym {
 
+void Cell::addParticle(const Particle& p) {
+    particles.push_back(p);
+}
+
 void Cell::addParticles(const std::list<Particle>& p) {
     particles.insert(particles.end(), p.begin(), p.end());
+}
+
+Particle Cell::removeParticle() {
+    Particle removed = particles.back();
+    particles.pop_back();
+    return removed;
 }
 
 void Cell::removeParticles(const size_t& rem_num, std::list<Particle>& removed) {
@@ -13,15 +24,12 @@ void Cell::removeParticles(const size_t& rem_num, std::list<Particle>& removed) 
     }
 }
 
-Cell Cell::split(const size_t& load) {
-    const size_t particles_to_take = load;
-    std::list<Particle> removed_particles;
-    removeParticles(particles_to_take, removed_particles);
-    return Cell(getId(), removed_particles);
-}
-
-Cell Cell::split() {
-    return split(getNumOfParticles()/2);
+Cell Cell::split(const double& load) {
+    Cell split_cell(getId());
+    while ((split_cell.getLoad() < load) && !particles.empty()) {
+        split_cell.addParticle(removeParticle());
+    }
+    return split_cell;
 }
 
 const Cell& Cell::merge(const Cell& cell) {
@@ -29,8 +37,11 @@ const Cell& Cell::merge(const Cell& cell) {
     return *this;
 }
 
-size_t Cell::getLoad() const {
-    return getNumOfParticles();
+double Cell::getLoad() const {
+    const GlobalEnvironment& env = getGlobalEnvironment();
+    const double& coeff = 1.0;//env.getBalanceCoeff();
+    return coeff*double(getNumOfParticles())/double(env.getTotalNumOfParticles()) + (1.0 - coeff);
+    //return getNumOfParticles();
 }
 
 void Cell::compute() {
