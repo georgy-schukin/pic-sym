@@ -13,6 +13,8 @@ PICMainWindow::PICMainWindow(QWidget *parent) :
 
     ui->graphicsView_2->setScene(&load_scene);
     ui->graphicsView_2->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
+    ui->coeffValueLabel->setText(QString::number(ui->balanceCoeffSlider->value()));
 }
 
 PICMainWindow::~PICMainWindow()
@@ -28,8 +30,11 @@ void PICMainWindow::on_startButton_clicked()
     mesh = picsym::CellMesh2D(mesh_size, mesh_size, picsym::Rect2D<picsym::Real>(-1, 1, 1, -1));
     mesh.generateExplosion(100);
 
-    picsym::GlobalEnvironment env(mesh.getNumOfCells(), mesh.getNumOfParticles(), mesh.getWidth(), 1.0);
-    picsym::setGlobalEnvironment(env);
+    picsym::GlobalEnvironment& env = picsym::GlobalEnvironment::get();
+        env.setTotalNumOfCells(mesh.getNumOfCells());
+        env.setTotalNumOfParticles(mesh.getNumOfParticles());
+        env.setMeshSize(mesh.getWidth());
+        env.setBalanceCoeff(double(ui->balanceCoeffSlider->value())/(ui->balanceCoeffSlider->maximum() - ui->balanceCoeffSlider->minimum()));
 
     machine.start(num_of_nodes, mesh);        
 
@@ -67,4 +72,11 @@ void PICMainWindow::draw() {
 
     machine.drawCells(cells_scene);
     machine.drawLoad(load_scene);
+}
+
+void PICMainWindow::on_balanceCoeffSlider_valueChanged(int value)
+{
+    const double coeff = double(value)/(ui->balanceCoeffSlider->maximum() - ui->balanceCoeffSlider->minimum());
+    ui->coeffValueLabel->setText(QString::number(value));
+    picsym::GlobalEnvironment::get().setBalanceCoeff(coeff);
 }

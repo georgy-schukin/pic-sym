@@ -2,12 +2,13 @@
 
 #ifndef Q_MOC_RUN
 #include <boost/thread/mutex.hpp>
+#include <boost/bind.hpp>
 #endif
 
 #include "base/inode.h"
 #include "base/threadactivity.h"
+#include "base/protectedqueue.h"
 #include <map>
-#include <queue>
 #include <QGraphicsScene>
 
 namespace picsym {
@@ -15,8 +16,7 @@ namespace picsym {
 class NodeThread : public INode, public ThreadActivity
 {
 private:
-    mutable boost::mutex mutex;
-    mutable boost::mutex lmutex, rmutex, cmutex;
+    mutable boost::mutex mutex;    
 
 private:
     CellRange my_cells;      
@@ -24,15 +24,15 @@ private:
 
 private:
     typedef std::map<size_t, INode*> NeighNodeMap;
-    typedef std::map<size_t, double> NeighLoadMap;
-    typedef std::pair<size_t, size_t> UIntPair;
-    typedef std::pair<size_t, double> UIntDoublePair;
+    typedef std::map<size_t, LoadType> NeighLoadMap;
+    typedef std::pair<size_t, LoadType> LoadPair;
+
     NeighNodeMap neighbours;
     NeighLoadMap neighbours_load;
 
-    std::queue<UIntDoublePair> incoming_load_info;
-    std::queue<UIntDoublePair> incoming_cell_requests;
-    std::queue<CellRange> incoming_cells;
+    ProtectedQueue<LoadPair> incoming_load_info;
+    ProtectedQueue<LoadPair> incoming_cell_requests;
+    ProtectedQueue<CellRange> incoming_cells;
 
 private:
     void threadFunction();
@@ -49,9 +49,11 @@ private:
 
     size_t getMaxLoadedNode();
 
-    CellRange takeCells(const double& load, const bool& from_back = true);
+    CellRange takeCells(const LoadType& load, const bool& from_back = true);
 
-    void processRequest(const size_t& src_id, const double& load);
+    void processRequest(const LoadPair& p);
+    void setLoadInfo(const LoadPair& p);
+    void addCells(const CellRange& range);
 
 public:
     NodeThread(const size_t& i) : id(i) {}
@@ -60,21 +62,20 @@ public:
     }  
     ~NodeThread() {}
 
-    const size_t& getId() const {
+    size_t getId() const {
         return id;
     }
 
     void addNeighbour(INode *neighbour);
-    void sendLoadInfo(const size_t& src_id, const double& load);
-    void requestCells(const size_t& src_id, const double& load);
-    void sendCells(const size_t& src_id, const CellRange& cells);    
+    void sendLoadInfo(const size_t& src_id, const LoadType& load);
+    void requestCells(const size_t& src_id, const LoadType& load);
+    void sendCells(const size_t& src_id, const CellRange& cells);        
+    void getStat(NodeStat& stat);
 
-    double getCurrentLoad() const;
-//    double getMaxLoad() const;
+    LoadType getCurrentLoad() const;
     size_t getCurrentNumOfCells() const;
-//    size_t getMaxNumOfParticles() const;
     size_t getCurrentNumOfParticles() const;
-    size_t getMaxNumOfParticlesInCell() const;
+    size_t getMaxNumOfParticlesInCell() const;    
 
     void drawCells(QGraphicsScene& scene, const QColor& base_color, const size_t& mesh_size, const size_t& max_num) const;
 };

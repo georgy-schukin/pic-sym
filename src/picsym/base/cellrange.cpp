@@ -55,15 +55,15 @@ Cell CellRange::remove(const bool& from_back) {
     return (from_back) ? removeFromBack() : removeFromFront();
 }
 
-Cell CellRange::splitFront(const double& load) {
+Cell CellRange::splitFront(const LoadType& load) {
     return cells.front().split(load);
 }
 
-Cell CellRange::splitBack(const double& load) {
+Cell CellRange::splitBack(const LoadType& load) {
     return cells.back().split(load);
 }
 
-Cell CellRange::split(const double& load, const bool& from_back) {
+Cell CellRange::split(const LoadType& load, const bool& from_back) {
     return (from_back) ? splitBack(load) : splitFront(load);
 }
 

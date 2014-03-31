@@ -10,11 +10,19 @@ namespace picsym {
  */
 class INode {
 public:
-    virtual const size_t& getId() const = 0;
+    struct NodeStat {
+        LoadType load;
+        size_t num_of_cells;
+        size_t num_of_particles;
+    };
+
+public:
+    virtual size_t getId() const = 0;
     virtual void addNeighbour(INode *neighbour) = 0;
-    virtual void sendLoadInfo(const size_t& src_id, const double& load) = 0;
-    virtual void requestCells(const size_t& src_id, const double& load) = 0;
+    virtual void sendLoadInfo(const size_t& src_id, const LoadType& load) = 0;
+    virtual void requestCells(const size_t& src_id, const LoadType& load) = 0;
     virtual void sendCells(const size_t& src_id, const CellRange& cells) = 0;    
+    virtual void getStat(NodeStat& stat) = 0;
 };
 
 }

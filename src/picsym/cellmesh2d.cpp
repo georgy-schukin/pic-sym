@@ -15,18 +15,18 @@ void CellMesh2D::generateExplosion(const size_t &max_value) {
 
 std::list<Particle> CellMesh2D::generateExplosionParticles(const size_t &x, const size_t &y, const size_t &max_value) {
     std::list<Particle> particles;
-    const double step_x = bounds.width() / getWidth();
-    const double step_y = bounds.height() / getHeight();
-    const double rx = bounds.getLeft() + x*step_x;
-    const double ry = bounds.getBottom() + y*step_y;
-    const double cx = bounds.getLeft() + bounds.width() / 2.0;
-    const double cy = bounds.getBottom() + bounds.height() / 2.0;
+    const LoadType step_x = bounds.width() / getWidth();
+    const LoadType step_y = bounds.height() / getHeight();
+    const LoadType rx = bounds.getLeft() + x*step_x;
+    const LoadType ry = bounds.getBottom() + y*step_y;
+    const LoadType cx = bounds.getLeft() + bounds.width() / 2.0;
+    const LoadType cy = bounds.getBottom() + bounds.height() / 2.0;
 
-    const double val = 0.5 - (rx*rx + ry*ry);
+    const LoadType val = 0.5 - (rx*rx + ry*ry);
     const size_t num_of_particles = val > 0 ? val*max_value : 0;
     for (size_t n = 0; n < num_of_particles; n++) {
-        const double px = rx + step_x*double(rand() % 1000)/1000.0;
-        const double py = ry + step_y*double(rand() % 1000)/1000.0;
+        const LoadType px = rx + step_x*LoadType(rand() % 1000)/1000.0;
+        const LoadType py = ry + step_y*LoadType(rand() % 1000)/1000.0;
         particles.push_back(Particle(Coord2D<Real>(px, py), Coord2D<Real>(px - cx, py - cy)));
     }
 
@@ -48,13 +48,13 @@ void CellMesh2D::draw(QGraphicsScene &scene) {
 }
 
 void CellMesh2D::init() {
-    const double step_x = bounds.width() / getWidth();
-    const double step_y = bounds.height() / getHeight();
+    const LoadType step_x = bounds.width() / getWidth();
+    const LoadType step_y = bounds.height() / getHeight();
     for (size_t x = 0; x < getWidth(); x++) {
         for (size_t y = 0; y < getHeight(); y++) {
             Cell& cell = operator ()(x, y);
-            const double rx = bounds.getLeft() + x*step_x;
-            const double ry = bounds.getBottom() + y*step_y;
+            const LoadType rx = bounds.getLeft() + x*step_x;
+            const LoadType ry = bounds.getBottom() + y*step_y;
             cell.setBounds(Rect2D<Real>(rx, rx + step_x, ry, ry + step_y));
             cell.setId(Hilbert::coordToDistance(x, y, getWidth()));
         }

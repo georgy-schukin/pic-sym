@@ -1,5 +1,6 @@
 #include "picsym/parallelmachine.h"
 #include "picsym/base/slicer.h"
+#include "picsym/base/algorithms.h"
 #include <QGraphicsTextItem>
 #include <QFontMetrics>
 #include <numeric>
@@ -38,19 +39,23 @@ void ParallelMachine::stop() {
         it->stop();
 }
 
-size_t min(const std::vector<size_t>& v) {
+template<class T>
+T min(const std::vector<T>& v) {
     return *(std::min_element(v.begin(), v.end()));
 }
 
-size_t max(const std::vector<size_t>& v) {
+template<class T>
+T max(const std::vector<T>& v) {
     return *(std::max_element(v.begin(), v.end()));
 }
 
-size_t diff(const std::vector<size_t>& v) {
-    return max(v) - min(v);
+template<class T>
+T diff(const std::vector<T>& v) {
+    return max<T>(v) - min<T>(v);
 }
 
-size_t len(const size_t& val, const size_t& max_val, const size_t& length) {
+template<class T>
+size_t len(const T& val, const T& max_val, const size_t& length) {
     return length*(float(val)/float(max_val));
 }
 
@@ -84,7 +89,8 @@ QRectF drawText(QGraphicsScene &scene, const QString& string, const size_t& x, c
 }
 
 void ParallelMachine::drawLoad(QGraphicsScene &scene) {
-    std::vector<size_t> load, n_cells, n_particles;
+    std::vector<LoadType> load;
+    std::vector<size_t> n_cells, n_particles;
     for (NodeThreadArray::iterator it = threads.begin(); it != threads.end(); it++) {
         load.push_back(it->getCurrentLoad());
         n_cells.push_back(it->getCurrentNumOfCells());
@@ -93,7 +99,7 @@ void ParallelMachine::drawLoad(QGraphicsScene &scene) {
 
     QFontMetrics metrics(scene.font());
     const size_t elem_height = (metrics.height() > 20) ? metrics.height() : 20;
-    const size_t total_load = std::accumulate(load.begin(), load.end(), 0);
+    const LoadType total_load = std::accumulate(load.begin(), load.end(), 0.0);
 
     size_t pos_x = 0, pos_y = 0;
     for (size_t i = 0; i < threads.size(); i++) {
@@ -109,24 +115,12 @@ void ParallelMachine::drawLoad(QGraphicsScene &scene) {
              arg(diff(load)).arg(diff(n_cells)).arg(diff(n_particles)), 0, pos_y).right();
 }
 
-/*double ParallelMachine::getMaxCellLoad() const {
-    size_t max_load = 0;
-    for (NodeThreadArray::const_iterator it = threads.begin(); it != threads.end(); it++) {
-        const double load = it->getMaxCellLoad();
-        if (load > max_load)
-            max_load = load;
-    }
-    return max_load;
-}*/
+size_t _getMaxNumOfParticlesInCell(const NodeThread& n) {
+    return n.getMaxNumOfParticlesInCell();
+}
 
 size_t ParallelMachine::getMaxNumOfParticlesInCell() const {
-    size_t max_num = 0;
-    for (NodeThreadArray::const_iterator it = threads.begin(); it != threads.end(); it++) {
-        const size_t num = it->getMaxNumOfParticlesInCell();
-        if (num > max_num)
-            max_num = num;
-    }
-    return max_num;
+    return alg::max<size_t>(threads.begin(), threads.end(), 0, _getMaxNumOfParticlesInCell);
 }
 
 }

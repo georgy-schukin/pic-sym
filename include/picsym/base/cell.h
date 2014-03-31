@@ -57,10 +57,10 @@ public:
     Particle removeParticle();
     void removeParticles(const size_t& rem_num, std::list<Particle>& removed);
 
-    Cell split(const double& load);
+    Cell split(const LoadType& load);
     const Cell& merge(const Cell& cell);
 
-    double getLoad() const;
+    LoadType getLoad() const;
 
     void compute();
 };

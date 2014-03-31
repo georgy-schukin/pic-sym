@@ -56,6 +56,10 @@ public:
         return cells.empty();
     }
 
+    size_t getSize() const {
+        return cells.size();
+    }
+
     const Cell& back() const {
         return cells.back();
     }
@@ -74,9 +78,9 @@ public:
     Cell removeFromBack();
     Cell remove(const bool& from_back = true);
 
-    Cell splitFront(const double& load);
-    Cell splitBack(const double& load);
-    Cell split(const double& load, const bool& from_back = true);
+    Cell splitFront(const LoadType& load);
+    Cell splitBack(const LoadType& load);
+    Cell split(const LoadType& load, const bool& from_back = true);
 };
 
 }

@@ -26,9 +26,12 @@ public:
 private slots:
     void on_startButton_clicked();    
     void on_stopButton_clicked();
+
     void on_sizeBox_valueChanged(int arg1);
     void on_nodesBox_valueChanged(int arg1);    
-    void draw();
+    void on_balanceCoeffSlider_valueChanged(int value);
+
+    void draw();          
 
 private:
     Ui::PICMainWindow *ui;    
