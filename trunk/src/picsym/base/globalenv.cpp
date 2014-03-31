@@ -2,14 +2,9 @@
 
 namespace picsym {
 
-GlobalEnvironment global_environment;
-
-const GlobalEnvironment& getGlobalEnvironment() {
-    return global_environment;
-}
-
-void setGlobalEnvironment(const GlobalEnvironment& env) {
-    global_environment = env;
+GlobalEnvironment& GlobalEnvironment::get() {
+    static GlobalEnvironment env;
+    return env;
 }
 
 }

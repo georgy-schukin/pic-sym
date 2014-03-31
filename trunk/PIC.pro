@@ -6,6 +6,8 @@
 
 QT       += core gui
 
+QMAKE_CXXFLAGS += -std=c++0x
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = PIC
@@ -45,6 +47,8 @@ HEADERS  += include/picmainwindow.h \
     include/picsym/base/particle.h \
     include/picsym/base/defines.h \
     include/picsym/base/rect2d.h \
-    include/picsym/base/globalenv.h
+    include/picsym/base/globalenv.h \
+    include/picsym/base/algorithms.h \
+    include/picsym/base/protectedqueue.h
 
 FORMS    += picmainwindow.ui

@@ -23,7 +23,7 @@ private:
     size_t total_num_of_particles;
 
 private:
-    //double getMaxCellLoad() const;
+    //LoadType getMaxCellLoad() const;
     size_t getMaxNumOfParticlesInCell() const;
 
 public:

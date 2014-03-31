@@ -24,7 +24,7 @@ void Cell::removeParticles(const size_t& rem_num, std::list<Particle>& removed) 
     }
 }
 
-Cell Cell::split(const double& load) {
+Cell Cell::split(const LoadType& load) {
     Cell split_cell(getId());
     while ((split_cell.getLoad() < load) && !particles.empty()) {
         split_cell.addParticle(removeParticle());
@@ -37,10 +37,10 @@ const Cell& Cell::merge(const Cell& cell) {
     return *this;
 }
 
-double Cell::getLoad() const {
-    const GlobalEnvironment& env = getGlobalEnvironment();
-    const double& coeff = 1.0;//env.getBalanceCoeff();
-    return coeff*double(getNumOfParticles())/double(env.getTotalNumOfParticles()) + (1.0 - coeff);
+LoadType Cell::getLoad() const {
+    const GlobalEnvironment& env = GlobalEnvironment::get();
+    const LoadType& coeff = env.getBalanceCoeff();
+    return coeff*LoadType(getNumOfParticles())/LoadType(env.getTotalNumOfParticles()) + (1.0 - coeff);
     //return getNumOfParticles();
 }
 
