@@ -59,13 +59,13 @@ const QColor colors[NUM_OF_COLORS] = {Qt::red, Qt::green, Qt::blue, Qt::yellow, 
                                 Qt::darkRed, Qt::darkGreen, Qt::darkBlue, Qt::darkYellow, Qt::darkCyan, Qt::darkMagenta, Qt::gray};
 
 void ParallelMachine::drawCells(QGraphicsScene &scene) {
-    const size_t max_cell_load = getMaxCellLoad();
+    const size_t max_num = getMaxNumOfParticlesInCell();
 
     for (NodeThreadArray::const_iterator it = threads.begin(); it != threads.end(); it++) { // draw cells of each node/thread
         const size_t& node_id = it->getId();
         const QColor& node_color = colors[node_id % NUM_OF_COLORS];
 
-        it->drawCells(scene, node_color, mesh_size, max_cell_load);
+        it->drawCells(scene, node_color, mesh_size, max_num);
 
         QGraphicsRectItem *rect = scene.addRect(QRectF(node_id*20, (mesh_size + 2)*10, 10, 10), QPen(Qt::black), QBrush(node_color));
         QGraphicsTextItem *text = scene.addText(QString::number(node_id));
@@ -109,10 +109,20 @@ void ParallelMachine::drawLoad(QGraphicsScene &scene) {
              arg(diff(load)).arg(diff(n_cells)).arg(diff(n_particles)), 0, pos_y).right();
 }
 
-size_t ParallelMachine::getMaxCellLoad() const {
+/*double ParallelMachine::getMaxCellLoad() const {
+    size_t max_load = 0;
+    for (NodeThreadArray::const_iterator it = threads.begin(); it != threads.end(); it++) {
+        const double load = it->getMaxCellLoad();
+        if (load > max_load)
+            max_load = load;
+    }
+    return max_load;
+}*/
+
+size_t ParallelMachine::getMaxNumOfParticlesInCell() const {
     size_t max_num = 0;
     for (NodeThreadArray::const_iterator it = threads.begin(); it != threads.end(); it++) {
-        const size_t num = it->getMaxCellLoad();
+        const size_t num = it->getMaxNumOfParticlesInCell();
         if (num > max_num)
             max_num = num;
     }

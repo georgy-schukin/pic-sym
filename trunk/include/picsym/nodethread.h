@@ -24,13 +24,14 @@ private:
 
 private:
     typedef std::map<size_t, INode*> NeighNodeMap;
-    typedef std::map<size_t, size_t> NeighLoadMap;
+    typedef std::map<size_t, double> NeighLoadMap;
     typedef std::pair<size_t, size_t> UIntPair;
+    typedef std::pair<size_t, double> UIntDoublePair;
     NeighNodeMap neighbours;
     NeighLoadMap neighbours_load;
 
-    std::queue<UIntPair> incoming_load_info;
-    std::queue<UIntPair> incoming_cell_requests;
+    std::queue<UIntDoublePair> incoming_load_info;
+    std::queue<UIntDoublePair> incoming_cell_requests;
     std::queue<CellRange> incoming_cells;
 
 private:
@@ -48,9 +49,9 @@ private:
 
     size_t getMaxLoadedNode();
 
-    CellRange takeCells(const size_t& load, const bool& from_back = true);
+    CellRange takeCells(const double& load, const bool& from_back = true);
 
-    void processRequest(const size_t& src_id, const size_t& load);
+    void processRequest(const size_t& src_id, const double& load);
 
 public:
     NodeThread(const size_t& i) : id(i) {}
@@ -64,16 +65,18 @@ public:
     }
 
     void addNeighbour(INode *neighbour);
-    void sendLoadInfo(const size_t& src_id, const size_t& load);
-    void sendCells(const size_t& src_id, const CellRange& cells);
-    void requestCells(const size_t& src_id, const size_t& load);
+    void sendLoadInfo(const size_t& src_id, const double& load);
+    void requestCells(const size_t& src_id, const double& load);
+    void sendCells(const size_t& src_id, const CellRange& cells);    
 
-    size_t getCurrentLoad() const;
-    size_t getMaxCellLoad() const;
+    double getCurrentLoad() const;
+//    double getMaxLoad() const;
     size_t getCurrentNumOfCells() const;
+//    size_t getMaxNumOfParticles() const;
     size_t getCurrentNumOfParticles() const;
+    size_t getMaxNumOfParticlesInCell() const;
 
-    void drawCells(QGraphicsScene& scene, const QColor& base_color, const size_t& mesh_size, const size_t& max_cell_load) const;
+    void drawCells(QGraphicsScene& scene, const QColor& base_color, const size_t& mesh_size, const size_t& max_num) const;
 };
 
 }
