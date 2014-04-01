@@ -28,7 +28,10 @@ public:
     }
 
     bool isInside(const Vector2D &point) const {        
-        return (point.x >= left) && (point.x <= right) &&
-                (point.y >= bottom) && (point.y <= top);
+        static const double EPS = 1e-9;
+        if ((point.x < left - EPS) || (point.x > right + EPS) || (point.y < bottom - EPS) || (point.y > top + EPS))
+            return false;
+        else
+            return true;
     }
 };
