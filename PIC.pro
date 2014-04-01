@@ -49,6 +49,7 @@ HEADERS  += include/picmainwindow.h \
     include/picsym/base/rect2d.h \
     include/picsym/base/globalenv.h \
     include/picsym/base/algorithms.h \
-    include/picsym/base/protectedqueue.h
+    include/picsym/base/protectedqueue.h \
+    include/picsym/base/protectedpairqueue.h
 
 FORMS    += picmainwindow.ui

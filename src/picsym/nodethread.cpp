@@ -54,11 +54,11 @@ void NodeThread::addNeighbour(INode *neighbour) {
 }
 
 void NodeThread::sendLoadInfo(const size_t& src_id, const LoadType& load) {    
-    incoming_load_info.push(LoadPair(src_id, load));
+    incoming_load_info.push(src_id, load);
 }
 
 void NodeThread::requestCells(const size_t& src_id, const LoadType& load) {    
-    incoming_cell_requests.push(LoadPair(src_id, load));
+    incoming_cell_requests.push(src_id, load);
 }
 
 void NodeThread::sendCells(const size_t& src_id, const CellRange& cells) {    
@@ -66,28 +66,24 @@ void NodeThread::sendCells(const size_t& src_id, const CellRange& cells) {
 }
 
 void NodeThread::processIncomingLoad() {
-    incoming_load_info.popAll(boost::bind(&NodeThread::setLoadInfo, this, _1));
+    incoming_load_info.popAll(boost::bind(&NodeThread::setLoadInfo, this, _1, _2));
 }
 
 void NodeThread::processIncomingRequests() {
-    incoming_cell_requests.popAll(boost::bind(&NodeThread::processRequest, this, _1));
+    incoming_cell_requests.popAll(boost::bind(&NodeThread::processRequest, this, _1, _2));
 }
 
 void NodeThread::processIncomingCells() {
     incoming_cells.popAll(boost::bind(&NodeThread::addCells, this, _1));
 }
 
-void NodeThread::processRequest(const LoadPair &p) {
-    const size_t& src_id = p.first;
-    const LoadType& load = p.second;
+void NodeThread::processRequest(const size_t &src_id, const LoadType &load) {
     const LoadType current_load = getCurrentLoad();
     const LoadType load_to_give = (current_load/2 > load) ? load : current_load/2; // give no more than a half of the current load
     neighbours[src_id]->sendCells(id, takeCells(load_to_give, (src_id > id)));
 }
 
-void NodeThread::setLoadInfo(const LoadPair &p) {
-    const size_t& src_id = p.first;
-    const LoadType& load = p.second;
+void NodeThread::setLoadInfo(const size_t &src_id, const LoadType &load) {
     neighbours_load[src_id] = load;
 }
 
