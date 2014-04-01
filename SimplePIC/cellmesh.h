@@ -19,21 +19,11 @@ private:
 
 public:
     typedef std::vector<Cell>::iterator iterator;
+    typedef std::vector<Cell>::const_iterator const_iterator;
 
 public:
-    CellMesh(const int &w, const int &h, const Rect2D &b) : width(w), height(h), bound(b) {
-
-        cells.resize(width*height); // create array of cells
-
-        cell_width = bound.width()/width; // cell size by X
-        cell_height = bound.height()/height; // cell size by Y
-
-        for (int i = 0; i < height; i++)
-            for (int j = 0; j < width; j++) {
-                const double cx = bound.left + j*cell_width; // cell left coord by X
-                const double cy = bound.top - i*cell_height; // cell top coord by Y (go from top to bottom by i)
-                cells[i*width + j].bound = Rect2D(cx, cx + cell_width, cy - cell_height, cy); // set cell's bound
-            }
+    CellMesh(const int &w, const int &h, const Rect2D &b) {
+        init(w, h, b);
     }
     ~CellMesh() {}
 
@@ -42,6 +32,14 @@ public:
     }
 
     iterator end() {
+        return cells.end();
+    }
+
+    const_iterator begin() const {
+        return cells.begin();
+    }
+
+    const_iterator end() const {
         return cells.end();
     }
 
@@ -61,21 +59,8 @@ public:
         return bound;
     }
 
-    // Get cell index by particle coord
-    int getCellIndex(const Vector2D &coord) {
-        const int ix = (coord.x - bound.right < 1e-9) ? width - 1 : int(floor((coord.x - bound.left) / cell_width)); // get cell indices for coord
-        const int iy = (coord.y - bound.bottom < 1e-9) ? height - 1 : int(floor((bound.top - coord.y) / cell_height));
-
-        if ((ix >= 0) && (ix < width) && (iy >=0) && (iy < height)) { // particle is inside of mesh
-            return iy*width + ix; // get cell index
-        } else
-            return -1;
-    }
-
-    int getNumOfParticles() const {
-        int num = 0;
-        for (const Cell &cell : cells)
-            num += cell.particles.size();
-        return num;
-    }
+    void init(const int &w, const int &h, const Rect2D &b);
+    void addParticleInCell(const Particle &particle);
+    int getCellIndex(const Vector2D &coord) const;
+    int getNumOfParticles() const;
 };
