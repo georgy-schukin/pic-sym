@@ -8,6 +8,7 @@
 #include "base/inode.h"
 #include "base/threadactivity.h"
 #include "base/protectedqueue.h"
+#include "base/protectedpairqueue.h"
 #include <map>
 #include <QGraphicsScene>
 
@@ -24,14 +25,13 @@ private:
 
 private:
     typedef std::map<size_t, INode*> NeighNodeMap;
-    typedef std::map<size_t, LoadType> NeighLoadMap;
-    typedef std::pair<size_t, LoadType> LoadPair;
+    typedef std::map<size_t, LoadType> NeighLoadMap;    
 
     NeighNodeMap neighbours;
     NeighLoadMap neighbours_load;
 
-    ProtectedQueue<LoadPair> incoming_load_info;
-    ProtectedQueue<LoadPair> incoming_cell_requests;
+    ProtectedPairQueue<size_t, LoadType> incoming_load_info;
+    ProtectedPairQueue<size_t, LoadType> incoming_cell_requests;
     ProtectedQueue<CellRange> incoming_cells;
 
 private:
@@ -51,8 +51,8 @@ private:
 
     CellRange takeCells(const LoadType& load, const bool& from_back = true);
 
-    void processRequest(const LoadPair& p);
-    void setLoadInfo(const LoadPair& p);
+    void processRequest(const size_t& src_id, const LoadType& load);
+    void setLoadInfo(const size_t& src_id, const LoadType& load);
     void addCells(const CellRange& range);
 
 public:
