@@ -7,7 +7,7 @@ void Body::init(const Rect2D &area) {
     coordinate.y = area.bottom + area.height() * double(rand() % 1000) / 1000.0;
     velocity.x = double(rand() % 2000 - 1000) / 1000.0;
     velocity.y = double(rand() % 2000 - 1000) / 1000.0;
-    mass = double(rand() % 1000 + 10) / 100.0;
+    mass = double(rand() % 1000 + 10) / 100.0; // avoid zero mass
 }
 
 Vector2D Body::computeForce(const Body &other) const {
