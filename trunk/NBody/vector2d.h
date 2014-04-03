@@ -19,6 +19,11 @@ public:
         y = yy;
     }
 
+    void operator=(const double &val) {
+        x = val;
+        y = val;
+    }
+
     void operator+=(const Vector2D &v) {
         x += v.x;
         y += v.y;
