@@ -1,6 +1,5 @@
 #include "treenode.h"
-#include <cstdio>
-#include <vector>
+#include <cmath>
 #include <algorithm>
 
 void TreeNode::insertBody(Body *new_body) {
@@ -11,13 +10,61 @@ void TreeNode::insertBody(Body *new_body) {
         if (body) { // node contains single body (external node)
             Body *prev_body = body;
             body = 0;
+            if (new_body->coordinate == prev_body->coordinate) { 
+                new_body->coordinate += Vector2D(1e-5, 1e-5); // fix equal coordinates
+            }
             const int quad_1 = domain.detectQuadrant(prev_body->coordinate);
-            const int quad_2 = domain.detectQuadrant(new_body->coordinate);
+            const int quad_2 = domain.detectQuadrant(new_body->coordinate);            
             getChild(quad_1)->insertBody(prev_body); // subdivide domain and insert bodies to subdomains
             getChild(quad_2)->insertBody(new_body);
         } else { // node is an internal node
             const int quad = domain.detectQuadrant(new_body->coordinate);
             getChild(quad)->insertBody(new_body); // insert to subdomain
+        }
+    }
+}
+
+bool TreeNode::computeMassCenter() {
+    if (is_empty)
+        return false;
+    if (body) { // single body - set mass center to this body
+        mass_center.mass = body->mass;
+        mass_center.coordinate = body->coordinate;
+    } else { // sum mass center from children
+        mass_center.mass = 0.0;
+        mass_center.coordinate = 0.0;
+        for (int i = 0; i < NUM_OF_CHILDREN; i++) {
+            if (children[i] && children[i]->computeMassCenter()) {
+                const Body &mc = children[i]->getMassCenter();
+                mass_center.mass += mc.mass;
+                mass_center.coordinate.x += mc.coordinate.x*mc.mass;
+                mass_center.coordinate.y += mc.coordinate.y*mc.mass;
+            }
+        }
+        mass_center.coordinate.x /= mass_center.mass;
+        mass_center.coordinate.y /= mass_center.mass;
+    }
+    return true;
+}
+
+Vector2D TreeNode::computeForce(Body *target, const double &theta) const {
+    if (is_empty || (body == target))
+        return Vector2D(0.0, 0.0);
+    if (body) {
+        return target->computeForce(*body); // return force between two single bodies
+    } else {
+        const double dx = target->coordinate.x - mass_center.coordinate.x;
+        const double dy = target->coordinate.y - mass_center.coordinate.y;
+        const double dist = sqrt(dx*dx + dy*dy) + 1e-12; // try to avoid zero distance
+        if (domain.width() / dist < theta) { // check approximation condition
+            return target->computeForce(mass_center); // make approximation with mass center
+        } else {
+            Vector2D force;
+            for (int i = 0; i < NUM_OF_CHILDREN; i++) {
+                if (children[i])
+                    force += children[i]->computeForce(target, theta); // sum force from children
+            }
+            return force;
         }
     }
 }

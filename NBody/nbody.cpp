@@ -1,12 +1,12 @@
 #include "body.h"
-#include "rect2d.h"
+#include "domain2d.h"
 #include <cstdio>
 #include <ctime>
 #include <cstdlib>
 
-void initBodies(Body *bodies, const int &num_of_bodies, const Rect2D &area) {
+void initBodies(Body *bodies, const int &num_of_bodies, const Domain2D &domain) {
     for (int i = 0; i < num_of_bodies; i++) {
-        bodies[i].init(area);
+        bodies[i].init(domain);
     }
 }
 
@@ -36,7 +36,8 @@ int main(int argc, char **argv) {
 
     const int num_of_bodies = (argc > 1) ? atoi(argv[1]) : NUM_OF_BODIES_DEFAULT;
     const int num_of_time_steps = (argc > 2) ? atoi(argv[2]) : NUM_OF_TIME_STEPS_DEFAULT;
-    const double delta_time = 0.01;
+
+    const double delta_t = 0.01;
 
     printf("Bodies: %d, time steps: %d\n", num_of_bodies, num_of_time_steps);
 
@@ -44,11 +45,11 @@ int main(int argc, char **argv) {
 
     clock_t c_beg = clock();
 
-    initBodies(bodies, num_of_bodies, Rect2D(-10, 10, -10, 10));
+    initBodies(bodies, num_of_bodies, Domain2D(-10, 10, -10, 10));
 
     for (int t = 0; t < num_of_time_steps; t++) {
         computeForces(bodies, num_of_bodies);
-        updateBodies(bodies, num_of_bodies, delta_time);
+        updateBodies(bodies, num_of_bodies, delta_t);
     }
 
     clock_t c_end = clock();

@@ -17,14 +17,14 @@ private:
     TreeNode *children[NUM_OF_CHILDREN]; // child nodes
 
     Body *body; // pointer to single body
-    Body center_of_mass; // center of mass body
+    Body mass_center; // center of mass
 
 private:
     void nullChildren() {
         for (int i = 0; i < NUM_OF_CHILDREN; i++) {
             children[i] = 0;            
         }
-    }
+    }        
 
     TreeNode* getChild(const int &num);
 
@@ -35,10 +35,17 @@ public:
     ~TreeNode() {        
         for (int i = 0; i < NUM_OF_CHILDREN; i++)
             if (children[i])
-                delete children[i];
-    }    
+                delete children[i];        
+    }
+
+    const Body& getMassCenter() const {
+        return mass_center;
+    }
 
     void insertBody(Body *new_body);
+    bool computeMassCenter();
+
+    Vector2D computeForce(Body *target, const double &theta) const;
 
     int getHeight() const;
     int getSize() const;
