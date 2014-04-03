@@ -1,33 +1,31 @@
 #include "body.h"
 #include "rect2d.h"
-#include <vector>
 #include <cstdio>
 #include <ctime>
+#include <cstdlib>
 
-typedef std::vector<Body> BodyArray;
-
-void initBodies(BodyArray &bodies, const Rect2D &area) {
-    for (BodyArray::iterator it = bodies.begin(); it != bodies.end(); it++) {
-        it->init(area);
+void initBodies(Body *bodies, const int &num_of_bodies, const Rect2D &area) {
+    for (int i = 0; i < num_of_bodies; i++) {
+        bodies[i].init(area);
     }
 }
 
-void computeForces(BodyArray &bodies) {            
-    for (BodyArray::iterator it = bodies.begin(); it != bodies.end(); it++) {
+void computeForces(Body *bodies, const int &num_of_bodies) {
+    for (int i = 0; i < num_of_bodies; i++) {
 
-        it->force.set(0.0, 0.0); // null force
+        bodies[i].force = 0.0; // null force
 
-        for (BodyArray::iterator it2 = it + 1; it2 != bodies.end(); it2++) {
-            const Vector2D fij = it->computeForce(*it2);
-            it->force += fij;
-            it2->force -= fij; // Fij = -Fji
+        for (int j = i + 1; j < num_of_bodies; j++) {
+            const Vector2D force_ij = bodies[i].computeForce(bodies[j]);
+            bodies[i].force += force_ij;
+            bodies[j].force -= force_ij; // Fij = -Fji
         }
     }
 }
 
-void updateBodies(BodyArray &bodies, const double &dt) {
-    for (BodyArray::iterator it = bodies.begin(); it != bodies.end(); it++) {
-        it->update(dt);
+void updateBodies(Body *bodies, const int &num_of_bodies, const double &dt) {
+    for (int i = 0; i < num_of_bodies; i++) {
+        bodies[i].update(dt);
     }
 }
 
@@ -42,20 +40,22 @@ int main(int argc, char **argv) {
 
     printf("Bodies: %d, time steps: %d\n", num_of_bodies, num_of_time_steps);
 
-    BodyArray bodies(num_of_bodies);
+    Body *bodies = new Body[num_of_bodies];
 
     clock_t c_beg = clock();
 
-    initBodies(bodies, Rect2D(-10, 10, -10, 10));
+    initBodies(bodies, num_of_bodies, Rect2D(-10, 10, -10, 10));
 
     for (int t = 0; t < num_of_time_steps; t++) {
-        computeForces(bodies);
-        updateBodies(bodies, delta_time);
+        computeForces(bodies, num_of_bodies);
+        updateBodies(bodies, num_of_bodies, delta_time);
     }
 
     clock_t c_end = clock();
 
     printf("Time to compute: %.5f seconds\n", float(c_end - c_beg)/CLOCKS_PER_SEC);
+
+    delete[] bodies;
 
     return 0;
 }
