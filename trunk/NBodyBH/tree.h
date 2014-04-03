@@ -22,8 +22,6 @@ public:
             delete root;
     }
 
-    void populate(Body *bodies, const int &num_of_bodies);
-
     int getHeight() const {
         return root->getHeight();
     }
@@ -31,4 +29,7 @@ public:
     int getSize() const {
         return root->getSize();
     }
+
+    void populate(Body *bodies, const int &num_of_bodies);
+    Vector2D computeForce(Body *body, const double &theta) const;
 };

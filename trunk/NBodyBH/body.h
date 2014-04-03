@@ -18,7 +18,7 @@ public:
     Body(const Vector2D &c, const Vector2D &v, const double &m) : coordinate(c), velocity(v), mass(m) {}
     ~Body() {}
 
-    void init(const Domain2D &area); // init coordinate, mass and velocity
+    void init(const Domain2D &domain); // init coordinate, mass and velocity
     Vector2D computeForce(const Body &other) const; // compute force between this body and other body
     void update(const double &dt); // update coordinate and velocity
 };

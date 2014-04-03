@@ -8,7 +8,7 @@ SOURCES += \
     body.cpp
 
 HEADERS += \
-    rect2d.h \
     vector2d.h \
-    body.h
+    body.h \
+    domain2d.h
 

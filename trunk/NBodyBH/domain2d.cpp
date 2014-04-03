@@ -29,3 +29,14 @@ Domain2D Domain2D::getQuadrant(const int &quadrant) const {
         return Domain2D(0.0, 0.0, 0.0, 0.0); // error - unknown domain id
     }
 }
+
+void Domain2D::expand(const Vector2D &point) {
+    if (point.x < left)
+        left = point.x;
+    if (point.x > right)
+        right = point.x;
+    if (point.y < bottom)
+        bottom = point.y;
+    if (point.y > top)
+        top = point.y;
+}

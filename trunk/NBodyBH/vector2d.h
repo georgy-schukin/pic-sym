@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 /**
   * @brief Pair of two real values: x and y
   */
@@ -10,7 +12,7 @@ public:
     double y;
 
 public:
-    Vector2D() : x(0), y(0) {}
+    Vector2D() : x(0.0), y(0.0) {}
     Vector2D(const double &xx, const double &yy) : x(xx), y(yy) {}
     ~Vector2D() {}
 
@@ -34,7 +36,8 @@ public:
         y -= v.y;
     }
 
-    bool operator==(const Vector2D &v) {
-
+    bool operator==(const Vector2D &v) const {
+        static const double EPS = 1e-10;
+        return (fabs(x - v.x) < EPS && fabs(y - v.y) < EPS);
     }
 };
