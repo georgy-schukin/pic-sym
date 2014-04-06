@@ -5,15 +5,15 @@ CONFIG -= qt
 
 SOURCES += \
     body.cpp \
-    treenode.cpp \
-    tree.cpp \
     domain2d.cpp \
-    nbodybh.cpp
+    nbodybh.cpp \
+    quadtree.cpp \
+    quadtreenode.cpp
 
 HEADERS += \
     body.h \
     vector2d.h \
-    tree.h \
-    treenode.h \
-    domain2d.h
+    domain2d.h \
+    quadtree.h \
+    quadtreenode.h
 
