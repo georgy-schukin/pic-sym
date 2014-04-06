@@ -1,4 +1,4 @@
-#include "tree.h"
+#include "quadtree.h"
 #include <cstdio>
 #include <ctime>
 #include <cstdlib>
@@ -9,7 +9,7 @@ void initBodies(Body *bodies, const int &num_of_bodies, const Domain2D &area) {
     }
 }
 
-void computeForces(Body *bodies, const int &num_of_bodies, const Tree &tree, const double &theta) {
+void computeForces(Body *bodies, const int &num_of_bodies, const QuadTree &tree, const double &theta) {
     for (int i = 0; i < num_of_bodies; i++) {
         bodies[i].force = tree.computeForce(&bodies[i], theta);
     }
@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
     initBodies(bodies, num_of_bodies, domain);
 
     for (int t = 0; t < num_of_time_steps; t++) {        
-        Tree tree(bodies, num_of_bodies, expandDomain(domain, bodies, num_of_bodies));
+        QuadTree tree(bodies, num_of_bodies, expandDomain(domain, bodies, num_of_bodies));
         computeForces(bodies, num_of_bodies, tree, theta);
         updateBodies(bodies, num_of_bodies, delta_t);
         //printf("%d %d\n", tree.getHeight(), tree.getSize());

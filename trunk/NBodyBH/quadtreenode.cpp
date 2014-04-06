@@ -1,30 +1,27 @@
-#include "treenode.h"
+#include "quadtreenode.h"
 #include <cmath>
 #include <algorithm>
 
-void TreeNode::insertBody(Body *new_body) {
+void QuadTreeNode::insertBody(Body *new_body) {
     if (is_empty) { // node contains no bodies
         is_empty = false;
         body = new_body; // insert single body
     } else {
         if (body) { // node contains single body (external node)
-            Body *prev_body = body;
+            Body *old_body = body;
             body = 0;
-            if (new_body->coordinate == prev_body->coordinate) { 
-                new_body->coordinate += Vector2D(1e-5, 1e-5); // fix equal coordinates
-            }
-            const int quad_1 = domain.detectQuadrant(prev_body->coordinate);
-            const int quad_2 = domain.detectQuadrant(new_body->coordinate);            
-            getChild(quad_1)->insertBody(prev_body); // subdivide domain and insert bodies to subdomains
-            getChild(quad_2)->insertBody(new_body);
-        } else { // node is an internal node
-            const int quad = domain.detectQuadrant(new_body->coordinate);
-            getChild(quad)->insertBody(new_body); // insert to subdomain
+            if (new_body->coordinate == old_body->coordinate) { 
+                new_body->coordinate += Vector2D(1e-7, 1e-7); // fix equal coordinates
+            }            
+            getChild(old_body->coordinate)->insertBody(old_body); // subdivide domain and insert bodies to subdomains
+            getChild(new_body->coordinate)->insertBody(new_body);
+        } else { // node is an internal node            
+            getChild(new_body->coordinate)->insertBody(new_body); // insert to subdomain
         }
     }
 }
 
-bool TreeNode::computeMassCenter() {
+bool QuadTreeNode::computeMassCenter() {
     if (is_empty)
         return false;
     if (body) { // single body - set mass center to this body
@@ -34,7 +31,7 @@ bool TreeNode::computeMassCenter() {
         mass_center.mass = 0.0;
         mass_center.coordinate = 0.0;
         for (int i = 0; i < NUM_OF_CHILDREN; i++) {
-            if (children[i] && children[i]->computeMassCenter()) {
+            if (children[i].get() && children[i]->computeMassCenter()) {
                 const Body &mc = children[i]->getMassCenter();
                 mass_center.mass += mc.mass;
                 mass_center.coordinate.x += mc.coordinate.x*mc.mass;
@@ -47,7 +44,7 @@ bool TreeNode::computeMassCenter() {
     return true;
 }
 
-Vector2D TreeNode::computeForce(Body *target, const double &theta) const {
+Vector2D QuadTreeNode::computeForce(Body *target, const double &theta) const {
     if (is_empty || (body == target))
         return Vector2D(0.0, 0.0);
     if (body) {
@@ -61,7 +58,7 @@ Vector2D TreeNode::computeForce(Body *target, const double &theta) const {
         } else {
             Vector2D force;
             for (int i = 0; i < NUM_OF_CHILDREN; i++) {
-                if (children[i])
+                if (children[i].get())
                     force += children[i]->computeForce(target, theta); // sum force from children
             }
             return force;
@@ -69,24 +66,29 @@ Vector2D TreeNode::computeForce(Body *target, const double &theta) const {
     }
 }
 
-TreeNode* TreeNode::getChild(const int &num) {
-    if (!children[num]) {
-        children[num] = new TreeNode(domain.getQuadrant(num)); // create new child
-    }
-    return children[num];
+QuadTreeNode* QuadTreeNode::getChild(const Vector2D &coord) {
+	const int quad = domain.detectQuadrant(coord);
+	return getChild(quad);
 }
 
-int TreeNode::getHeight() const {
+QuadTreeNode* QuadTreeNode::getChild(const int &num) {
+    if (!children[num].get()) {
+        children[num].reset(new QuadTreeNode(domain.getQuadrant(num))); // create new child
+    }
+    return children[num].get();
+}
+
+int QuadTreeNode::getHeight() const {
     int height[NUM_OF_CHILDREN];
     for (int i = 0; i < NUM_OF_CHILDREN; i++)
-        height[i] = (children[i]) ? 1 + children[i]->getHeight() : 1;
+        height[i] = (children[i].get()) ? 1 + children[i]->getHeight() : 1;
     return *std::max_element(height, height + NUM_OF_CHILDREN);
 }
 
-int TreeNode::getSize() const {
+int QuadTreeNode::getSize() const {
     int size = 1;
     for (int i = 0; i < NUM_OF_CHILDREN;i++)
-        if (children[i])
+        if (children[i].get())
             size += children[i]->getSize();
     return size;
 }
